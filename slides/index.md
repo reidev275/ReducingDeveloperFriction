@@ -45,13 +45,7 @@ We'll finish up with F#, seeing type providers, discriminated unions, and maybe 
 
 ***
 
-![2005](images/2005.jpg)
-
-' I've worked at corporations with thousands of employees 
-
-***
-
-![Dilbert](images/dilbert.jpg)
+![2004](images/2004.jpg)
 
 ' I've worked at companies with 5 employees
 
@@ -59,15 +53,22 @@ We'll finish up with F#, seeing type providers, discriminated unions, and maybe 
 
 ![Small Company](images/smallCompany.jpg)
 
+' I've worked at corporations with thousands of employees 
 
 ***
 
-![Tombras](images/smallCompany.jpg)
-
+![Dilbert](images/dilbert.jpg)
 
 ' I'm currently a Senior Developer at The Tombras Group
+
+
+***
+
+![Tombras](images/tombras.jpg)
+
 ' INSERT TOMBRAS COPY HERE
 ' ... in preparation for this talk I did alot of research
+
 
 
 ***
