@@ -1,152 +1,154 @@
-- title : FsReveal
-- description : Introduction to FsReveal
-- author : Karlkim Suwanmongkol
-- theme : night
-- transition : default
+﻿- title : Reducing Developer Friction
+- description : A Developer's journey from OO to FP
+- author : Reid Evans
+- theme : Simple
+- transition : Fade
 
 ***
 
-### What is FsReveal?
+'s' turns on speaker mode with dual screen
 
-- Generates [reveal.js](http://lab.hakim.se/reveal-js/#/) presentation from [markdown](http://daringfireball.net/projects/markdown/)
-- Utilizes [FSharp.Formatting](https://github.com/tpetricek/FSharp.Formatting) for markdown parsing
-- Get it from [http://fsprojects.github.io/FsReveal/](http://fsprojects.github.io/FsReveal/)
+Learning a new paradigm is one of the more difficult things to do in software development. 
+So why would an object oriented developer of 10 years suddenly decide to make the drastic switch to functional programming? 
+In this talk I'll show you why I started looking for other ways of writing software and why the switch wasn't as sudden or as drastic as it may seem.
 
-![FsReveal](images/logo.png)
+We'll start our journey with C#, discussing SOLID principals and the use of IoC containers. 
+Then we'll move to JavaScript to see first class functions and closures. 
+Next we'll visit the exciting distributed world of Elixir on the Erlang VM. 
+We'll finish up with F#, seeing type providers, discriminated unions, and maybe even a certain 5 letter M word.
+
+
+***
+## Reducing Developer Friction
+
+#### A Developer's Journey from OO to FP
+
+<br>
+<br>
+
+###[@ReidNEvans](http://twitter.com/reidnevans)
+
+
+
+' good morning
+' thank you so much for coming today
+' This is Reducing Developer Friction 
+' A developer's journey from OO to FP
+' I'm Reid Evans and you can find me on Twitter @ReidNEvans
+' ... I've been developing software since 95
 
 ***
 
-### Reveal.js
+![90s](images/90s.jpg)
 
-- A framework for easily creating beautiful presentations using HTML.
-
-
-> **Atwood's Law**: any application that can be written in JavaScript, will eventually be written in JavaScript.
+' ...and I've been doing it professionally since 04
 
 ***
 
-### FSharp.Formatting
+![2005](images/2005.jpg)
 
-- F# tools for generating documentation (Markdown processor and F# code formatter).
-- It parses markdown and F# script file and generates HTML or PDF.
-- Code syntax highlighting support.
-- It also evaluates your F# code and produce tooltips.
+' I've worked at corporations with thousands of employees 
 
 ***
 
-### Syntax Highlighting
+![Dilbert](images/dilbert.jpg)
 
-#### F# (with tooltips)
+' I've worked at companies with 5 employees
 
-    let a = 5
-    let factorial x = [1..x] |> List.reduce (*)
-    let c = factorial a
+***
+
+![Small Company](images/smallCompany.jpg)
+
+
+***
+
+![Tombras](images/smallCompany.jpg)
+
+
+' I'm currently a Senior Developer at The Tombras Group
+' INSERT TOMBRAS COPY HERE
+' ... in preparation for this talk I did alot of research
+
+
+***
+
+
+
+![Rich Hickey](images/richHickey.jpg)
+
+***
+
+
+
+
+#Solid principals
+
+***
+
+
+
+#### Single Responsibility Principal
+
+> "A method/class/function should have only one reason to change"
+
+***
+
+
+
+#### Open Closed Principal
+
+> " "
+
+***
+
+
+
+#### Liskov Substitution Principal
+
+> " "
+
+***
+
+
+
+#### Interface Segregation Principal 
+
+> "no client should be forced to depend on methods it does not use."
+
+***
+
+
+
+#### Dependency Inversion Principal
+
+> " "
+
+
+
+
+before / after examples leading to ctor + method classes 
 
 ---
 
-#### C#
-
-    [lang=cs]
-    using System;
-
-    class Program
-    {
-        static void Main()
-        {
-            Console.WriteLine("Hello, world!");
-        }
-    }
-
----
-
-#### JavaScript
-
-    [lang=js]
-    function copyWithEvaluation(iElem, elem) {
-        return function (obj) {
-            var newObj = {};
-            for (var p in obj) {
-                var v = obj[p];
-                if (typeof v === "function") {
-                    v = v(iElem, elem);
-                }
-                newObj[p] = v;
-            }
-            if (!newObj.exactTiming) {
-                newObj.delay += exports._libraryDelay;
-            }
-            return newObj;
-        };
-    }
-
-
----
-
-#### Haskell
- 
-    [lang=haskell]
-    recur_count k = 1 : 1 : 
-        zipWith recurAdd (recur_count k) (tail (recur_count k))
-            where recurAdd x y = k * x + y
-
-    main = do
-      argv <- getArgs
-      inputFile <- openFile (head argv) ReadMode
-      line <- hGetLine inputFile
-      let [n,k] = map read (words line)
-      printf "%d\n" ((recur_count k) !! (n-1))
-
-*code from [NashFP/rosalind](https://github.com/NashFP/rosalind/blob/master/mark_wutka%2Bhaskell/FIB/fib_ziplist.hs)*
-
----
-
-### SQL
-
-    [lang=sql]
-    select *
-    from
-    (select 1 as Id union all select 2 union all select 3) as X
-    where Id in (@Ids1, @Ids2, @Ids3)
-
-*sql from [Dapper](https://code.google.com/p/dapper-dot-net/)*
-
----
-
-### C/AL
-
-    [lang=cal]
-    PROCEDURE FizzBuzz(n : Integer) r_Text : Text[1024];
-    VAR
-      l_Text : Text[1024];
-    BEGIN
-      r_Text := '';
-      l_Text := FORMAT(n);
-
-      IF (n MOD 3 = 0) OR (STRPOS(l_Text,'3') > 0) THEN
-        r_Text := 'Fizz';
-      IF (n MOD 5 = 0) OR (STRPOS(l_Text,'5') > 0) THEN
-        r_Text := r_Text + 'Buzz';
-      IF r_Text = '' THEN
-        r_Text := l_Text;
-    END;
+> "If you have a class w 2 methods and one of them is init you probably have a function" @jackdied Jack Dietrich
 
 ***
 
-**Bayes' Rule in LaTeX**
+First class functions
 
-$ \Pr(A|B)=\frac{\Pr(B|A)\Pr(A)}{\Pr(B|A)\Pr(A)+\Pr(B|\neg A)\Pr(\neg A)} $
+---
+
+JavaScript
 
 ***
 
-### The Reality of a Developer's Life 
 
-**When I show my boss that I've fixed a bug:**
-  
-![When I show my boss that I've fixed a bug](http://www.topito.com/wp-content/uploads/2013/01/code-07.gif)
-  
-**When your regular expression returns what you expect:**
-  
-![When your regular expression returns what you expect](http://www.topito.com/wp-content/uploads/2013/01/code-03.gif)
-  
-*from [The Reality of a Developer's Life - in GIFs, Of Course](http://server.dzone.com/articles/reality-developers-life-gifs)*
+
+Status Quo
+http://www.daedtech.com/tag/expert-beginner > @DaedTech
+
+***
+
+> "The model you use to view the world shapes the thoughts you are able to think." @theburningmonk
+
 

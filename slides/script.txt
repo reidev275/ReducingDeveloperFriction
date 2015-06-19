@@ -1,0 +1,15 @@
+[Intro slide with Title, name, contact info]
+good morning
+thank you so much for coming today
+I'm excited to be at Codestock, and I'm excited to be giving this presentation today.
+
+I'm Reid Evans, you can find me on Twitter @ReidNEvans
+
+
+In preparation for this talk I watched a lot of other talks.
+I wanted to see what makes a good talk.  
+What are some things I should do?  [ knowledge! ]
+What are some things I shouldn't do?  [ fail ]
+What is it about some talks that makes me want to watch it again? [ Big Rich Hickey pic ]
+
+
