@@ -10,10 +10,10 @@
 
 Learning a new paradigm is one of the more difficult things to do in software development. 
 So why would an object oriented developer of 10 years suddenly decide to make the drastic switch to functional programming? 
-In this talk I'll show you why I started looking for other ways of writing software and why the switch wasn't as sudden or as drastic as it may seem.
+In this talk I’ll show you why I started looking for other ways of writing software and why the switch wasn't as sudden or as drastic as it may seem.
 
-We'll start our journey with C#, discussing SOLID principals and the use of IoC containers. 
-Then we'll move to JavaScript to see first class functions and closures. 
+We’ll start our journey with C#, discussing SOLID principals and the use of IoC containers. 
+Then we’ll move to JavaScript to see first class functions and closures. 
 Next we'll visit the exciting distributed world of Elixir on the Erlang VM. 
 We'll finish up with F#, seeing type providers, discriminated unions, and maybe even a certain 5 letter M word.
 
@@ -21,7 +21,7 @@ We'll finish up with F#, seeing type providers, discriminated unions, and maybe 
 ***
 ## Reducing Developer Friction
 
-#### A Developer's Journey from OO to FP
+#### A Developer’s Journey from OO to FP
 
 <br>
 <br>
@@ -33,21 +33,21 @@ We'll finish up with F#, seeing type providers, discriminated unions, and maybe 
 ' good morning
 ' thank you so much for coming today
 ' This is Reducing Developer Friction 
-' A developer's journey from OO to FP
-' I'm Reid Evans and you can find me on Twitter @ReidNEvans
+' A developer’s journey from OO to FP
+' I’m Reid Evans and you can find me on Twitter @ReidNEvans
 ' ... I've been developing software since 95
 
 ***
 
 ![90s](images/90s.jpg)
 
-' ...and I've been doing it professionally since 04
+' ...and I’ve been doing it professionally since 04
 
 ***
 
 ![2004](images/2004.jpg)
 
-' I've worked at companies with 5 employees
+' I’ve worked at companies with 5 employees
 
 ***
 
@@ -59,7 +59,7 @@ We'll finish up with F#, seeing type providers, discriminated unions, and maybe 
 
 ![Dilbert](images/dilbert.jpg)
 
-' I'm currently a Senior Developer at The Tombras Group
+' I’m currently a Senior Developer at The Tombras Group
 
 
 ***
@@ -67,7 +67,7 @@ We'll finish up with F#, seeing type providers, discriminated unions, and maybe 
 ![Tombras](images/tombras.jpg)
 
 ' INSERT TOMBRAS COPY HERE
-' ... in preparation for this talk I did alot of research
+' ... in preparation for this talk I did ablot of research
 
 
 
@@ -131,7 +131,7 @@ before / after examples leading to ctor + method classes
 
 ---
 
-> "If you have a class w 2 methods and one of them is init you probably have a function" @jackdied Jack Dietrich
+> "If you have a class with 2 methods and one of them is init, you probably have a function" @jackdied Jack Dietrich
 
 ***
 
