@@ -67,69 +67,64 @@ We'll finish up with F#, seeing type providers, discriminated unions, and maybe 
 ![Tombras](images/tombras.jpg)
 
 ' INSERT TOMBRAS COPY HERE
-' ... in preparation for this talk I did alot of research
-
-
 
 ***
 
+The beginning... 
 
-
-![Rich Hickey](images/richHickey.jpg)
-
-***
-
-
+	procedure TForm1.Button1Click(Sender: TObject);
+	begin
+		Label1.Caption := 'Hello World';
+	end;
 
 
 #Solid principals
 
 ***
 
+### Single Responsibility Principal
 
+A method/class/function should have only one reason to change
 
-#### Single Responsibility Principal
+***
 
-> "A method/class/function should have only one reason to change"
+### Open Closed Principal
+
+Entites should be open for extension but closed for modification
+
+***
+
+### Liskov Substitution Principal
+
+Parent types should be substitutable by their child types
+
+***
+
+### Interface Segregation Principal 
+
+No client should be forced to depend on methods it does not use
+
+***
+
+### Dependency Inversion Principal
+
+High level modules should not depend on low level modules
 
 ***
 
 
-
-#### Open Closed Principal
-
-> " "
-
-***
-
-
-
-#### Liskov Substitution Principal
-
-> " "
-
-***
-
-
-
-#### Interface Segregation Principal 
-
-> "no client should be forced to depend on methods it does not use."
-
-***
-
-
-
-#### Dependency Inversion Principal
-
-> " "
 
 
 
 
 before / after examples leading to ctor + method classes 
 
----
+
+***
+
+An object fundamentally has two reasons to change because it contains data and methods
+
+*** 
 
 > "If you have a class w 2 methods and one of them is init you probably have a function" @jackdied Jack Dietrich
 
