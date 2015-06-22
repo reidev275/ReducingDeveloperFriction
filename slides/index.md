@@ -1,7 +1,7 @@
 ﻿- title : Reducing Developer Friction
 - description : A Developer's journey from OO to FP
 - author : Reid Evans
-- theme : Simple
+- theme : Default
 - transition : Fade
 
 ***
@@ -67,25 +67,97 @@ We'll finish up with F#, seeing type providers, discriminated unions, and maybe 
 ![Tombras](images/tombras.jpg)
 
 ' INSERT TOMBRAS COPY HERE
-' ... in preparation for this talk I did ablot of research
-
-
 
 ***
 
+My beginnings in professional development
 
-
-![Rich Hickey](images/richHickey.jpg)
-
-***
-
-The beginning... 
-
+	[lang=pascal]
 	procedure TForm1.Button1Click(Sender: TObject);
 	begin
 		Label1.Caption := 'Hello World';
 	end;
 
+' hello world in Delphi
+' ... which then leads us to complex data stuff in Delphi
+	
+***
+	[lang=pascal]
+	procedure TForm1.Button1Click(Sender: TObject);
+	begin
+		Customers := TTable.Create(Self);
+		with Customers do
+		begin
+			DatabaseName := 'MyDB';
+			TableName := 'MyTable';
+			Open;
+			
+			IndexFieldNames := 'City';
+			SetRangeStart;
+			FieldByName('City').Value := 'Knoxville';
+			SetRangeEnd;
+			FieldByName('City').Value := 'Knoxville';
+			ApplyRange;	
+		
+			Edit;
+			FieldByName('State').AsString := 'TN';
+			Post;
+		
+			Close;			
+		end;
+	end;
+	
+' in the UI we're opening a db connection to a table 
+' we're specifying a db index, filtering and then updating the data
+' 1 layer, very rapid development, very difficult maintenance
+' so then I hear all this amazing stuff about .net
+	
+***
+
+	[lang=cs]
+	void button1_Click(object sender, System.EventArgs e)
+	{
+		using (var con = new SqlConnection("MyDb"))
+		using (var command = con.CreateCommand())
+		{
+			command.CommandText = 
+				@"Update Customers 
+				  SET [State] = 'TN' 
+				  WHERE City = 'Knoxville'";
+			con.Open();
+			command.ExecuteNonQuery();
+		}		
+	}
+	
+' reduced LOC because of better api
+' same paradigm, same dev practices
+	
+	
+***
+
+	[lang=cs]
+	void button1_Click(object sender, System.EventArgs e)
+	{
+		UpdateCustomers();
+	}
+	
+	void UpdateCustomers()
+	{
+		using (var con = new SqlConnection("MyDb"))
+		using (var command = con.CreateCommand())
+		{
+			command.CommandText = 
+				@"Update Customers 
+				  SET [State] = 'TN' 
+				  WHERE City = 'Knoxville'";
+			con.Open();
+			command.ExecuteNonQuery();
+		}
+	}
+
+' of course the method could be parameterized, etc
+
+***
 
 #Solid principals
 
@@ -155,5 +227,9 @@ http://www.daedtech.com/tag/expert-beginner > @DaedTech
 ***
 
 > "The model you use to view the world shapes the thoughts you are able to think." @theburningmonk
+
+
+
+http://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html
 
 
