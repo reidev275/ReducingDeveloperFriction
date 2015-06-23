@@ -1,7 +1,7 @@
 ﻿- title : Reducing Developer Friction
 - description : A Developer's journey from OO to FP
 - author : Reid Evans
-- theme : Default
+- theme : Simple
 - transition : Fade
 
 ***
@@ -219,6 +219,13 @@ JavaScript
 
 ***
 
+	map:  ('a -> 'b)     ->  M<'a>  ->  M<'b>
+	bind: ('a -> M<'b>)  ->  M<'a>  ->  M<'b>
+	return: 'a -> M<'a>
+	
+***
+
+
 
 
 Status Quo
@@ -230,6 +237,6 @@ http://www.daedtech.com/tag/expert-beginner > @DaedTech
 
 
 
-http://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html
+http://tinyurl.com/MonadsInPictures
 
 
