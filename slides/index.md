@@ -29,44 +29,21 @@ We'll finish up with F#, seeing type providers, discriminated unions, and maybe 
 ###[@ReidNEvans](http://twitter.com/reidnevans)
 
 
-
 ' good morning
 ' thank you so much for coming today
 ' This is Reducing Developer Friction 
 ' A developer’s journey from OO to FP
 ' I’m Reid Evans and you can find me on Twitter @ReidNEvans
-' ... I've been developing software since 95
-
-***
-
-![90s](images/90s.jpg)
-
-' ...and I’ve been doing it professionally since 04
-
-***
-
-![2004](images/2004.jpg)
-
-' I’ve worked at companies with 5 employees
-
-***
-
-![Small Company](images/smallCompany.jpg)
-
-' I've worked at corporations with thousands of employees 
-
-***
-
-![Dilbert](images/dilbert.jpg)
-
-' I’m currently a Senior Developer at The Tombras Group
-
+' developing since 95, pro in 04
 
 ***
 
 ![Tombras](images/tombras.jpg)
 
+' I’m currently a Senior Developer at The Tombras Group
 ' INSERT TOMBRAS COPY HERE
+' we're going to start off slow and move to 
+
 
 ***
 
@@ -85,22 +62,16 @@ My beginnings in professional development
 	[lang=pascal]
 	procedure TForm1.Button1Click(Sender: TObject);
 	begin
-		Customers := TTable.Create(Self);
-		with Customers do
+		Locations := TTable.Create(Self);
+		with Locations do
 		begin
 			DatabaseName := 'MyDB';
 			TableName := 'MyTable';
 			Open;
 			
-			IndexFieldNames := 'City';
-			SetRangeStart;
-			FieldByName('City').Value := 'Knoxville';
-			SetRangeEnd;
-			FieldByName('City').Value := 'Knoxville';
-			ApplyRange;	
-		
-			Edit;
-			FieldByName('State').AsString := 'TN';
+			Append;
+			FieldByName('City').Value := cityEdit.Text;
+			FieldByName('State').Value := stateEdit.Text;
 			Post;
 		
 			Close;			
@@ -108,7 +79,7 @@ My beginnings in professional development
 	end;
 	
 ' in the UI we're opening a db connection to a table 
-' we're specifying a db index, filtering and then updating the data
+' we're appending, setting some values and saving
 ' 1 layer, very rapid development, very difficult maintenance
 ' so then I hear all this amazing stuff about .net
 	
@@ -121,9 +92,12 @@ My beginnings in professional development
 		using (var command = con.CreateCommand())
 		{
 			command.CommandText = 
-				@"Update Customers 
-				  SET [State] = 'TN' 
-				  WHERE City = 'Knoxville'";
+				@"Insert into Locations ([State], City)
+				  Values(@State, @City)";
+				  
+			command.Parameters.AddWithValue("State", tbCity.Text);
+			command.Parameters.AddWithValue("City", tbState.Text);  
+				  
 			con.Open();
 			command.ExecuteNonQuery();
 		}		
@@ -135,8 +109,19 @@ My beginnings in professional development
 	
 ***
 
+<section data-background="#F0AD4E">
+What if I want to do the same thing from a different event?
+</section>
+
+***
+
 	[lang=cs]
 	void button1_Click(object sender, System.EventArgs e)
+	{
+		UpdateCustomers();
+	}
+	
+	void Form1_FormClosing(object sender, FormClosingEventArgs e)
 	{
 		UpdateCustomers();
 	}
@@ -147,19 +132,25 @@ My beginnings in professional development
 		using (var command = con.CreateCommand())
 		{
 			command.CommandText = 
-				@"Update Customers 
-				  SET [State] = 'TN' 
-				  WHERE City = 'Knoxville'";
+				@"Insert into Locations ([State], City)
+				  Values(@State, @City)";
+				  
+			command.Parameters.AddWithValue("State", tbCity.Text);
+			command.Parameters.AddWithValue("City", tbState.Text);  
+				  
 			con.Open();
 			command.ExecuteNonQuery();
 		}
 	}
 
+' this seems simple but moving to procedural code is a paradigm shift
 ' of course the method could be parameterized, etc
 
 ***
 
 #Solid principals
+
+' all images courtesy of Derick Bailey 
 
 ***
 
@@ -167,11 +158,20 @@ My beginnings in professional development
 
 A method/class/function should have only one reason to change
 
+---
+
+![Single Responsibility Principal](images/srp.jpg)
+
+
 ***
 
 ### Open Closed Principal
 
-Entites should be open for extension but closed for modification
+Methods/classes/functions should be open for extension but closed for modification
+
+---
+
+![Open Closed Principal](images/ocp.jpg)
 
 ***
 
@@ -179,17 +179,29 @@ Entites should be open for extension but closed for modification
 
 Parent types should be substitutable by their child types
 
+---
+
+![Liskov Substitution Principal](images/lsp.jpg)
+
 ***
 
 ### Interface Segregation Principal 
 
 No client should be forced to depend on methods it does not use
 
+---
+
+![Interface Segregation Principal](images/isp.jpg)
+
 ***
 
 ### Dependency Inversion Principal
 
 High level modules should not depend on low level modules
+
+---
+
+![Dependency Inversion Principal](images/dip.jpg)
 
 ***
 
@@ -205,9 +217,7 @@ before / after examples leading to ctor + method classes
 
 An object fundamentally has two reasons to change because it contains data and methods
 
-*** 
 
-> "If you have a class with 2 methods and one of them is init, you probably have a function" @jackdied Jack Dietrich
 
 ***
 
@@ -219,14 +229,74 @@ JavaScript
 
 ***
 
-	map:  ('a -> 'b)     ->  M<'a>  ->  M<'b>
-	bind: ('a -> M<'b>)  ->  M<'a>  ->  M<'b>
-	return: 'a -> M<'a>
-	
+<section data-background="#F0AD4E">
+Can't I do all of that in C#?
+</section>
+
+' I was stuck here for about a year and a half
+' lets look into how I had been coding
+
 ***
 
+' DI code with Test Induced Damage
+' Mark Seeman's Look no mocks talk`
 
+***
 
+> "If you have a class with 2 methods and one of them is init, you probably have a function" @jackdied Jack Dietrich
+
+***
+
+In functional languages the type signature for a function IS an interface
+
+' immediately removes half of the code we have to write and maintain
+' no need for interfaces.  no need for IOC containers.
+
+***
+
+Railway Oriented Programming
+or the Maybe monad
+
+***
+
+<section data-background="#F0AD4E">
+If F# can do Monads, why the fuss over Haskell?
+</section>
+
+***
+
+Simplistic Monad in F#
+	
+	type MaybeBuilder() =
+		member this.Return(x) = Some x
+		member this.Bind(x, f) = 
+			match x with
+			| None -> None
+			| Some a -> f a
+	
+Monad in Haskell
+	
+	[lang=haskell]
+	class Monad m where {
+	  (>>=)  :: m a -> (a -> m b) -> m b
+	  return :: a                 -> m a
+	} 	
+	
+' the Fsharp example is for a specific monad
+' the Haskell version is generic and accepts any monad
+' not generic type classes like Haskell
+
+***
+
+Equivalent Haskell Monad in F#
+
+	type Monad<'M> =
+		abstract member bind : 'M<'a> -> ('a -> 'M<'b>) -> 'M<'b>
+		abstract member ``return`` : 'a -> 'M<'a>
+
+	//error FS0712: Type parameter cannot be used as type constructor
+
+***
 
 Status Quo
 http://www.daedtech.com/tag/expert-beginner > @DaedTech
@@ -239,4 +309,5 @@ http://www.daedtech.com/tag/expert-beginner > @DaedTech
 
 http://tinyurl.com/MonadsInPictures
 
-
+Look, No Mocks! Functional TDD with F#
+http://www.infoq.com/presentations/mock-fsharp-tdd
