@@ -95,8 +95,8 @@ My beginnings in professional development
 				@"Insert into Locations ([State], City)
 				  Values(@State, @City)";
 				  
-			command.Parameters.AddWithValue("State", tbCity.Text);
-			command.Parameters.AddWithValue("City", tbState.Text);  
+			command.Parameters.AddWithValue("City", tbCity.Text);
+			command.Parameters.AddWithValue("State", tbState.Text);  
 				  
 			con.Open();
 			command.ExecuteNonQuery();
@@ -104,7 +104,7 @@ My beginnings in professional development
 	}
 	
 ' reduced LOC because of better api
-' same paradigm, same dev practices
+' still Event Driven Programming
 	
 	
 ***
@@ -118,15 +118,10 @@ What if I want to do the same thing from a different event?
 	[lang=cs]
 	void button1_Click(object sender, System.EventArgs e)
 	{
-		UpdateCustomers();
+		CreateLocation(tbCity.Text, tbState.Text);
 	}
 	
-	void Form1_FormClosing(object sender, FormClosingEventArgs e)
-	{
-		UpdateCustomers();
-	}
-	
-	void UpdateCustomers()
+	void CreateLocation(string city, string state)
 	{
 		using (var con = new SqlConnection("MyDb"))
 		using (var command = con.CreateCommand())
@@ -135,22 +130,23 @@ What if I want to do the same thing from a different event?
 				@"Insert into Locations ([State], City)
 				  Values(@State, @City)";
 				  
-			command.Parameters.AddWithValue("State", tbCity.Text);
-			command.Parameters.AddWithValue("City", tbState.Text);  
+			command.Parameters.AddWithValue("State", state);
+			command.Parameters.AddWithValue("City", city);  
 				  
 			con.Open();
 			command.ExecuteNonQuery();
 		}
 	}
 
+' Procedural Programming
 ' this seems simple but moving to procedural code is a paradigm shift
-' of course the method could be parameterized, etc
+' CreateLocation can be placed anywhere now.  It is no longer tied to the form
 
 ***
 
 #Solid principals
 
-' all images courtesy of Derick Bailey 
+' all images courtesy of Derrick Bailey 
 
 ***
 
@@ -205,15 +201,69 @@ High level modules should not depend on low level modules
 
 ***
 
+<section data-background="#F0AD4E">
+Can't I do all of that in C#?
+</section>
+	
+***	
+	
+	
+	public class LocationsController : ApiController {
+		public void Post(string city, string state) 
+		{
+			CreateLocation(city, state);
+		}
+		
+		void CreateLocation(string city, string state) 
+		{
+			using (var con = new SqlConnection("MyDb"))
+			using (var command = con.CreateCommand()) {
+				command.CommandText = 
+					@"Insert into Locations ([State], City)
+					  Values(@State, @City)";
+					  
+				command.Parameters.AddWithValue("State", state);
+				command.Parameters.AddWithValue("City", city);  
+					  
+				con.Open();
+				command.ExecuteNonQuery();
+			}
+		}
+	}
 
-
-
-
-
-before / after examples leading to ctor + method classes 
-
+' example from earlier moved into web api
 
 ***
+
+	public interface ILocationRepository
+	{
+		void Insert(string city, string state);
+	}
+
+	public class LocationsController : ApiController 
+	{
+		readonly ILocationRepository _locationRepository;
+		
+		public LocationsController(ILocationRepository locationRepository)
+		{
+			_locationRepository = locationRepository;
+		}
+	
+		public void Post(string city, string state)
+		{
+			_locationRepository.Insert(city, state);
+		}
+	}
+	
+' Constructor Injection DI version
+' SOLID, if contrived example
+' should probably null check in the constructor
+' realistically there's probably a business layer for validation etc.
+
+***
+
+
+
 
 An object fundamentally has two reasons to change because it contains data and methods
 
@@ -247,8 +297,10 @@ Can't I do all of that in C#?
 
 ***
 
-In functional languages the type signature for a function IS an interface
+In F#, the type signature for a function is equivalent to an interface
 
+' all functions with the same signature are substitutable
+' functions can only act on arguments, not built in state
 ' immediately removes half of the code we have to write and maintain
 ' no need for interfaces.  no need for IOC containers.
 
@@ -265,7 +317,7 @@ If F# can do Monads, why the fuss over Haskell?
 
 ***
 
-Simplistic Monad in F#
+Monad in F#
 	
 	type MaybeBuilder() =
 		member this.Return(x) = Some x
