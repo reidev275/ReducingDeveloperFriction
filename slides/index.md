@@ -181,6 +181,8 @@ How should all this code fit together?
 
 ### OO Design patterns
 
+***
+
 Factory 
 
 	[lang=cs]
@@ -199,9 +201,7 @@ Factory
 	
 ' here we return the abstraction
 
----
-
-### OO Design patterns
+***
 
 Strategy
 
@@ -223,9 +223,7 @@ Strategy
 
 ' here we're dependent upon the abstraction to do work
 	
----
-	
-### OO Design patterns
+***
 	
 Command
 
@@ -251,9 +249,13 @@ Design patterns simply deal with how an abstraction is passed around in code
 
 <section data-background="#F0AD4E">
 
-How do I know if the code I'm writing is any good?
+But how do I know if the code I'm writing is any good?
 
 </section>
+
+' you can write really bad code using really good patterns and vice versa
+
+***
 
 
 #Solid principals
@@ -266,7 +268,7 @@ How do I know if the code I'm writing is any good?
 
 A method/class/function should have only one reason to change
 
----
+***
 
 ![Single Responsibility Principal](images/srp.jpg)
 
@@ -277,7 +279,7 @@ A method/class/function should have only one reason to change
 
 Methods/classes/functions should be open for extension but closed for modification
 
----
+***
 
 ![Open Closed Principal](images/ocp.jpg)
 
@@ -287,7 +289,7 @@ Methods/classes/functions should be open for extension but closed for modificati
 
 Parent types should be substitutable by their child types
 
----
+***
 
 ![Liskov Substitution Principal](images/lsp.jpg)
 
@@ -297,7 +299,7 @@ Parent types should be substitutable by their child types
 
 No client should be forced to depend on methods it does not use
 
----
+***
 
 ![Interface Segregation Principal](images/isp.jpg)
 
@@ -307,10 +309,43 @@ No client should be forced to depend on methods it does not use
 
 High level modules should not depend on low level modules
 
----
+***
 
 ![Dependency Inversion Principal](images/dip.jpg)
 
+
+***
+
+<section data-background="#F0AD4E">
+Can't I do all of that in C#?
+</section>
+
+***
+
+
+	[lang=cs]
+	public class LocationsManager  
+	{
+		readonly ILocationRepository _locationRepository;
+		readonly IStateValidator _stateValidator;
+		
+		public LocationsManager(ILocationRepository locationRepository, IStateValidator stateValidator)
+		{
+			_locationRepository = locationRepository;
+			_stateValidator = stateValidator;
+		}
+	
+		public void CreateLocation(string city, string state)
+		{
+			if (!_stateValidator.IsValid(state)) 
+				throw new ArgumentException();
+			_locationRepository.Insert(city, state);
+		}
+	}
+	
+' Constructor Injection DI version
+' multiple strategy patterns
+' anyone written code like this?
 
 ***
 
@@ -319,60 +354,46 @@ High level modules should not depend on low level modules
 	{
 		void Insert(string city, string state);
 	}
-
-	public class LocationsManager  
-	{
-		readonly ILocationRepository _locationRepository;
-		
-		public LocationsManager(ILocationRepository locationRepository)
-		{
-			_locationRepository = locationRepository;
-		}
 	
-		public void CreateLocation(string city, string state)
+	public interface IStateValidator
+	{
+		bool IsValid(string state);
+	}
+	
+' we also need these interfaces and at least 1 implementation
+' then we need some way of composing all of this
+
+***
+
+	[lang=cs]
+	public class ServiceModule : NinjectModule
+	{
+		public override void Load()
 		{
-			_locationRepository.Insert(city, state);
+			Bind<ILocationRepository>()
+				.To<LocationRepository>()
+				.WithConstructorArgument("connectionString");
+			Bind<IStateValidator>().To<StateValidator>();
 		}
 	}
 	
-' Constructor Injection DI version
-' SOLID, if contrived example
-' should probably null check in the constructor
-' realistically there's probably a business layer for validation etc.
+' now we adhere to SOLID principals
+' I gave a presentation on this last year
+' go to definition now takes us to the interface
+' have 3x lines of code
 
 ***
 
-<section data-background="#5bc0de">
+> **Industry Average**: about 15 - 50 errors per 1000 lines of delivered code.
+> **Microsoft Applications**: about 10 - 20 defects per 1000 lines of code during in-house testing
 
-An object fundamentally has two reasons to change because it contains data and methods
-
-</section>
-
-***
-
-First class functions
-
----
-
-JavaScript
+' from Code Complete by Steve McConnell
 
 ***
 
 <section data-background="#F0AD4E">
-Can't I do all of that in C#?
+Is there a way to do this with fewer lines of code?
 </section>
-
-' I was stuck here for about a year and a half
-' lets look into how I had been coding
-
-***
-
-' DI code with Test Induced Damage
-' Mark Seeman's Look no mocks talk`
-
-***
-
-> "If you have a class with 2 methods and one of them is init, you probably have a function" @jackdied Jack Dietrich
 
 ***
 
