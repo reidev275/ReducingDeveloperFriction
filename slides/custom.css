@@ -1,0 +1,17 @@
+table.pre, pre.fssnip, pre {
+  background-color: #fff;
+  color: #444;
+  
+}
+
+span.k, span.hljs-keyword {
+  color: #428bca;
+}
+
+span.s, span.hljs-string {
+  color: #d9534f;  
+}
+
+span.hljs-title {
+  color: #5bc0de;  
+}

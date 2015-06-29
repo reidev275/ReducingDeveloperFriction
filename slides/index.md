@@ -41,9 +41,10 @@ We'll finish up with F#, seeing type providers, discriminated unions, and maybe 
 ![Tombras](images/tombras.jpg)
 
 ' I’m currently a Senior Developer at The Tombras Group
-' INSERT TOMBRAS COPY HERE
-' we're going to start off slow and move to 
-
+' Tombras is a 140+ employee, full-service agency with a digital mindset. 
+' We are one of the top 35 independent agencies in north america. 
+' Basically we create sites and web applications for companies who
+' don't have the resources or have too much red tape to do so internally
 
 ***
 
@@ -81,6 +82,7 @@ My beginnings in professional development
 ' in the UI we're opening a db connection to a table 
 ' we're appending, setting some values and saving
 ' 1 layer, very rapid development, very difficult maintenance
+' anyone had any experience with Delphi?  Anders Hejlsberg's work pre msft and C#
 ' so then I hear all this amazing stuff about .net
 	
 ***
@@ -95,15 +97,15 @@ My beginnings in professional development
 				@"Insert into Locations ([State], City)
 				  Values(@State, @City)";
 				  
-			command.Parameters.AddWithValue("City", tbCity.Text);
-			command.Parameters.AddWithValue("State", tbState.Text);  
+			command.Parameters.AddWithValue("City", textboxCity.Text);
+			command.Parameters.AddWithValue("State", textboxState.Text);  
 				  
 			con.Open();
 			command.ExecuteNonQuery();
 		}		
 	}
 	
-' reduced LOC because of better api
+' reduced LOC because of better api - SQL
 ' still Event Driven Programming
 	
 	
@@ -143,6 +145,116 @@ What if I want to do the same thing from a different event?
 ' CreateLocation can be placed anywhere now.  It is no longer tied to the form
 
 ***
+
+	[lang=cs]
+	public class LocationsManager  
+	{
+		public void CreateLocation(string city, string state) 
+		{
+			if (!States.Contains(state)) throw new ArgumentException()
+			
+			using (var con = new SqlConnection("MyDb"))
+			using (var command = con.CreateCommand()) {
+				command.CommandText = 
+					@"Insert into Locations ([State], City)
+					  Values(@State, @City)";
+					  
+				command.Parameters.AddWithValue("State", state);
+				command.Parameters.AddWithValue("City", city);  
+					  
+				con.Open();
+				command.ExecuteNonQuery();
+			}
+		}
+	}
+
+' still procedural / imperative but no longer has any ties to the UI
+' data validation and data persistence in a single method
+
+***
+
+<section data-background="#F0AD4E">
+How should all this code fit together?
+</section>
+
+***
+
+### OO Design patterns
+
+Factory 
+
+	[lang=cs]
+	public class Factory
+	{
+		public IFoo GetImplementation(MyEnum enum)
+		{
+			switch (enum)
+			{
+				case MyEnum.Foo : return new Foo();
+				case MyEnum.Bar : return new Bar();
+				default: return null;
+			}
+		}
+	}
+	
+' here we return the abstraction
+
+---
+
+### OO Design patterns
+
+Strategy
+
+	[lang=cs]
+	public class LocationsManager  
+	{
+		readonly ILocationRepository _locationRepository;
+		
+		public LocationsManager(ILocationRepository locationRepository)
+		{
+			_locationRepository = locationRepository;
+		}
+	
+		public void CreateLocation(string city, string state)
+		{
+			_locationRepository.Insert(city, state);
+		}
+	}
+
+' here we're dependent upon the abstraction to do work
+	
+---
+	
+### OO Design patterns
+	
+Command
+
+	[lang=cs]
+	public interface ICommand
+	{
+		void Execute();
+	}
+	
+' here the whole thing is an abstraction
+		
+***
+
+<section data-background="#5bc0de">
+
+Design patterns simply deal with how an abstraction is passed around in code
+
+</section>
+
+' they are an answer, but not to the question I really had
+
+***
+
+<section data-background="#F0AD4E">
+
+How do I know if the code I'm writing is any good?
+
+</section>
+
 
 #Solid principals
 
@@ -199,57 +311,25 @@ High level modules should not depend on low level modules
 
 ![Dependency Inversion Principal](images/dip.jpg)
 
-***
-
-<section data-background="#F0AD4E">
-Can't I do all of that in C#?
-</section>
-	
-***	
-	
-	
-	public class LocationsController : ApiController {
-		public void Post(string city, string state) 
-		{
-			CreateLocation(city, state);
-		}
-		
-		void CreateLocation(string city, string state) 
-		{
-			using (var con = new SqlConnection("MyDb"))
-			using (var command = con.CreateCommand()) {
-				command.CommandText = 
-					@"Insert into Locations ([State], City)
-					  Values(@State, @City)";
-					  
-				command.Parameters.AddWithValue("State", state);
-				command.Parameters.AddWithValue("City", city);  
-					  
-				con.Open();
-				command.ExecuteNonQuery();
-			}
-		}
-	}
-
-' example from earlier moved into web api
 
 ***
 
+	[lang=cs]
 	public interface ILocationRepository
 	{
 		void Insert(string city, string state);
 	}
 
-	public class LocationsController : ApiController 
+	public class LocationsManager  
 	{
 		readonly ILocationRepository _locationRepository;
 		
-		public LocationsController(ILocationRepository locationRepository)
+		public LocationsManager(ILocationRepository locationRepository)
 		{
 			_locationRepository = locationRepository;
 		}
 	
-		public void Post(string city, string state)
+		public void CreateLocation(string city, string state)
 		{
 			_locationRepository.Insert(city, state);
 		}
@@ -262,12 +342,11 @@ Can't I do all of that in C#?
 
 ***
 
-
-
+<section data-background="#5bc0de">
 
 An object fundamentally has two reasons to change because it contains data and methods
 
-
+</section>
 
 ***
 
