@@ -1,15 +1,15 @@
-table.pre, pre.fssnip, pre {
+table.pre, pre.fssnip, pre, span.f, span.i {
   background-color: #fff;
   color: #444;
   
 }
 
 span.k, span.hljs-keyword {
-  color: #428bca;
+  color: #0a548b;
 }
 
 span.s, span.hljs-string {
-  color: #d9534f;  
+  color: #be5221;  
 }
 
 span.hljs-title {
