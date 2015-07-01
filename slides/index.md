@@ -46,6 +46,14 @@ We'll finish up with F#, seeing type providers, discriminated unions, and maybe 
 
 ***
 
+Don't be an Expert Beginner
+
+> Someone should write a utility that searches your code base to make sure all the code you copy and paste stays in sync.
+
+http://www.daedtech.com/tag/expert-beginner > @DaedTech
+
+***
+
 My beginnings in professional development
 
 	[lang=pascal]
@@ -143,7 +151,7 @@ What if I want to do the same thing from a different event?
 ' CreateLocation can be placed anywhere now.  It is no longer tied to the form
 
 ***
-
+	
 	[lang=cs]
 	public class LocationsManager  
 	{
@@ -243,8 +251,6 @@ Design patterns are just terms to define how an abstraction is passed around in 
 
 </section>
 
-
-
 ***
 
 <section data-background="#F0AD4E">
@@ -257,27 +263,23 @@ How do I know if the code I'm writing is any good?
 
 ***
 
-
-#Solid principals
-
-' all images courtesy of Derrick Bailey 
+## Solid principals
 
 ***
 
 ### Single Responsibility Principal
 
-A method/class/function should have only one reason to change
+' A method/class/function should have only one reason to change
 
 ***
 
 ![Single Responsibility Principal](images/srp.jpg)
 
-
 ***
 
 ### Open Closed Principal
 
-Methods/classes/functions should be open for extension but closed for modification
+' Methods/classes/functions should be open for extension but closed for modification
 
 ***
 
@@ -287,7 +289,7 @@ Methods/classes/functions should be open for extension but closed for modificati
 
 ### Liskov Substitution Principal
 
-Parent types should be substitutable by their child types
+' Parent types should be substitutable by their child types
 
 ***
 
@@ -297,7 +299,7 @@ Parent types should be substitutable by their child types
 
 ### Interface Segregation Principal 
 
-No client should be forced to depend on methods it does not use
+' No client should be forced to depend on methods it does not use
 
 ***
 
@@ -307,17 +309,16 @@ No client should be forced to depend on methods it does not use
 
 ### Dependency Inversion Principal
 
-High level modules should not depend on low level modules
+' High level modules should not depend on low level modules
 
 ***
 
 ![Dependency Inversion Principal](images/dip.jpg)
 
-
 ***
 
 <section data-background="#F0AD4E">
-Can't I do all of that in C#?
+Can't I do all of that in Object Oriented code?
 </section>
 
 ***
@@ -437,11 +438,34 @@ Can't I do all of that in C#?
 		}
 	}
 	
+---
+
+	[lang=cs]
+	public class LocationsManager  
+	{
+		readonly ILocationRepository _locationRepository;
+		readonly IStateValidator _stateValidator;
+		
+		public LocationsManager(ILocationRepository r, IStateValidator v)
+		{
+			_locationRepository = r; 
+			_stateValidator = v;
+		}
+	
+		public void CreateLocation(string city, string state)
+		{
+			if (!_stateValidator.IsValid(state)) 
+				throw new ArgumentException("Not a valid State");
+			_locationRepository.Insert(city, state);
+		}
+	}
+
+' I gave a presentation on this last year	
 ' now we adhere to SOLID principals
-' I gave a presentation on this last year
 ' we can test / mock / stub
+' BUT
 ' go to definition now takes us to the interface
-' have 3x lines of code
+' have 3x lines of code and do the same work
 
 ***
 
@@ -456,8 +480,10 @@ Code Complete by Steve McConnell
 ***
 
 <section data-background="#F0AD4E">
-Is there a way to do this with fewer lines of code?
+Can we stay SOLID without code bloat?
 </section>
+
+' Mark Seeman's Look No Mocks - Test Induced Damage
 
 ***
 
@@ -499,7 +525,7 @@ In functional languages, all functions are interfaces
 
 *** 
 
-Equivalent JavaScript
+Equivalent* JavaScript
 
 	[lang=js]
 	var addingCalculator = function(input) { return input + 1 }
@@ -513,12 +539,12 @@ Equivalent JavaScript
 
 ' no interface defined, no private ICalculator to manage
 ' no IOC container needed to manage dependencies
-' function is a first class citizen
+' passing functions rather than objects
 ' * => the log function works for any function
 
 ***
 
-A closer C# equivalent
+A more accurate C# equivalent
 
 	[lang=cs]
 	public static TResult Log<T, TResult>(Func<T, TResult> func, T input)
@@ -533,6 +559,24 @@ A closer C# equivalent
 ' benefit is that we're guaranteed that the input will fit with the func
 
 ***
+
+<section data-background="#5bc0de">
+
+Functional languages are generic by default
+
+</section>
+
+***
+
+	[lang=cs]
+	public static TResult Log<T, TResult>(Func<T, TResult> func, T input)
+	{
+		Console.WriteLine("input is " + input.ToString());
+		var result = func(input);
+		Console.WriteLine("result is " + result.ToString());
+		return result;
+	}
+
 
 The same code in F#
 
@@ -552,42 +596,37 @@ Ok, less code is cool, but I need more than that to learn a new paradigm.
 
 ***
 
-	[lang=cs]
-	public void Insert(string city, string state)
-	{
-		using (var con = new SqlConnection(Global.ConnectionString))
-		using (var command = con.CreateCommand()) {
-			command.CommandText = 
-				@"Insert into Locations ([State], City)
-				  Values(@State, @City)";
-				  
-			command.Parameters.AddWithValue("State", state);
-			command.Parameters.AddWithValue("City", city);  
-				  
-			con.Open();
-			command.ExecuteNonQuery();
-		}
-	}
-
-' using ado
-' it would have taken me a test to know State required the brackets
+## Domain Driven Design
 	
+' I was not a fan until switching to the functional way
+' doesn't have to mean fat domain models
+
 ***
 
-	type LocationInsert = 
-		SqlCommandProvider<
-			"INSERT INTO Locations([State], City)
-			VALUES (@State, @City)", "connectionString">
-	
-	let insertLocation city state =
-		use command = new LocationInsert()
-		command.Execute(state, city)
+	module CardGame = 
+		type Suit = Club | Diamond | Spade | Heart
 		
-' sql is checked at design time against actual db
-' Execute forces correct arguments
-' view live code demo
+		type Rank = Two | Three | Four | Five | Six | Seven | Eight
+							| Nine | Ten | Jack | Queen | King | Ace
+						
+		type Card = Suit * Rank
+		
+		type Hand = Card list
+		type Deck = Card list
+		
+		type Player = { Name: string; Hand: Hand }
+		type Game = { Deck: Deck; Players: Player list }
+		
+		type Deal = Deck -> (Deck * Card)
+		type PickupCard = (Hand * Card) -> Hand
+		
 
-***
+http://fsharpforfunandprofit/ddd
+
+' make illegal states unrepresentable
+		
+*** 
+
 
 ## Staying focused on the happy path
 
@@ -600,18 +639,55 @@ Happy Path in C#
 	{
 		validateRequest(location);
 		db.updateDbFromRequest(location);
+		email.EmailNearbyCustomers(location);
 		return "Success";
 	}
 	
+' what if the request isn't valid?
+
 ---
 
-Non Happy Path in C#
+	[lang=cs]
+	public string InsertLocation(Location location)
+	{
+		if (!validateRequest(location))
+			throw new ArgumentException("Location not valid");
+		db.updateDbFromRequest(location);
+		email.EmailNearbyCustomers(location);
+		return "Success";
+	}
+
+' what if the db throws an error?
+
+--- 
 
 	[lang=cs]
 	public void InsertLocation(Location location)
 	{
 		if (!validateRequest(location))
 			throw new ArgumentException("Location not valid");
+		try
+		{
+			db.updateDbFromRequest(location);
+		} 
+		catch (Exception e)
+		{
+			Logger.Log(e);
+			return "Failure";
+		}	
+		email.EmailNearbyCustomers(location);
+		return "Success";
+	}
+	
+---	
+
+Unhappy Path in C#
+
+	[lang=cs]
+	public string InsertLocation(Location location)
+	{
+		if (!validateRequest(location))
+			return "Failure";
 		try
 		{
 			db.updateDbFromRequest(location);
@@ -633,8 +709,8 @@ Happy Path in F#
 
 	let executeUseCase = 
 		validateRequest
-		>> bind updateDbFromRequest
-		>> bind emailNearbyCustomers
+		>>= updateDbFromRequest
+		>>= emailNearbyCustomers
 
 ---
 
@@ -642,8 +718,8 @@ Unhappy Path in F#
 
 	let executeUseCase = 
 		validateRequest
-		>> bind updateDbFromRequest
-		>> bind emailNearbyCustomers
+		>>= updateDbFromRequest
+		>>= emailNearbyCustomers
 
 ***
 
@@ -653,19 +729,44 @@ How is that possible?
 	
 ***
 
-Railway Oriented Programming
-or the Maybe monad
+	[lang=js]
+	$.when([1,2,3])
+	.then(function (data) {
+		console.log(data)
+	});
+	// [1,2,3]
+	
+' can replace when with ajax
+
+---
+
+	function log (x) { console.log(x) }
+	function addOne (x) { return x + 1 }
+
+	[lang=js]
+	$.when([1,2,3])
+	.then(function (data) {
+		return data.map(addOne)
+	}).then(log);	
+	// [2,3,4]
+	
+' our functions aren't written to know about promises
+' then does magic to allow us to work with the underlying structure
 
 ***
 
-* LINQ
-* Async / Await
-* Lodash / Underscore
-* Promises
+	
 
-' who has used one of these? 
-' anyone not used one of these?
-' all examples of Monads
+	type Option<'T> =
+		| Some of 'T
+		| None
+
+' 
+
+***
+
+Railway Oriented Programming
+or the Maybe monad
 
 ***
 
@@ -721,16 +822,127 @@ Equivalent Haskell Monad in F#
 
 ***
 
-Status Quo
-http://www.daedtech.com/tag/expert-beginner > @DaedTech
+<section data-background="#F0AD4E">
+How do I choose a functional language?
+</section>
 
 ***
 
-> "The model you use to view the world shapes the thoughts you are able to think." @theburningmonk
+* **Haskell** - Pure language
+* **Clojure** - A Lisp on JVM
+* **F#** - Functional first on CLR / .NET
+* **Erlang / Elixir** - Massive scalability
 
 
+' all languages have pros and console
+' need 'web scale'? look at Erlang and Elixir
+' already on .Net? look at F# though Clojure can target clr
+' already on Java? Clojure and Scala
+' want a pure language? try Haskell
 
+***
+
+F# Type Providers
+
+***
+
+	[lang=cs]
+	public void Insert(string city, string state)
+	{
+		using (var con = new SqlConnection(Global.ConnectionString))
+		using (var command = con.CreateCommand()) {
+			command.CommandText = 
+				@"Insert into Locations ([State], City)
+				  Values(@State, @City)";
+				  
+			command.Parameters.AddWithValue("State", state);
+			command.Parameters.AddWithValue("City", city);  
+				  
+			con.Open();
+			command.ExecuteNonQuery();
+		}
+	}
+
+' using ado
+' it would have taken me a test to know State required the brackets
+	
+***
+
+	type LocationInsert = 
+		SqlCommandProvider<
+			"INSERT INTO Locations([State], City)
+			VALUES (@State, @City)", "connectionString">
+	
+	let insertLocation city state =
+		use command = new LocationInsert()
+		command.Execute(state, city)
+		
+' sql is checked at design time against actual db
+' Execute forces correct arguments
+' view live code demo
+
+***
+
+## Anecdotal Results of switching to FP
+
+* Social dealer management system for Freightliner
+* 2 months development
+* 2,000 lines of code
+* 2 bugs not caught at design / compile time
+
+---
+
+### Bug #1
+
+	type GetChildObjects = 
+		SqlCommandProvider<
+			"Select * FROM ChildTable where id = @id", "connectionString">
+	
+	type GetChildObjects' = 
+		SqlCommandProvider<
+			"Select * FROM ChildTable where parentId = @id", "connectionString">	
+			
+' both require an int, no way for compiler to know I goofed
+
+---
+
+### Bug #2
+
+	type GetChildObjects = 
+		SqlCommandProvider<
+			"Select * FROM ChildTable where parentId = @id", "connectionString">
+			
+	let getChildObjects parentId = 
+		use query = new GetChildObjects()
+		query.Execute(parentId)
+		|> Seq.map (fun x -> { Id = x.Id; Name = x.Name })
+
+' Too many open commands 
+' Seq is lazy evaluated so by returning it the runtime wasn't sure when to dispose of the query
+
+---
+
+	type GetChildObjects = 
+		SqlCommandProvider<
+			"Select * FROM ChildTable where parentId = @id", "connectionString">
+			
+	let getChildObjects parentId = 
+		use query = new GetChildObjects()
+		query.Execute(parentId)
+		|> Seq.map (fun x -> { Id = x.Id; Name = x.Name })
+		|> Seq.toList
+
+		
+***
+
+> **@theburningmonk** The model you use to view the world shapes the thoughts you are able to think.
+
+http://fsharpforfunandprofit.com
+
+Monads in pictures
 http://tinyurl.com/MonadsInPictures
 
 Look, No Mocks! Functional TDD with F#
 http://www.infoq.com/presentations/mock-fsharp-tdd
+
+http://theburningmonk.com/2015/04/dont-learn-a-syntax-learn-to-change-the-way-you-think/
