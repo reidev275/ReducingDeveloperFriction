@@ -532,7 +532,7 @@ Equivalent* JavaScript
 	
 	var log = function(func, input) {
 		console.log(input);
-		let result = func(input);
+		var result = func(input);
 		console.log(result);
 		return result;
 	}
@@ -544,21 +544,37 @@ Equivalent* JavaScript
 
 ***
 
-A more accurate C# equivalent
-
 	[lang=cs]
-	public static TResult Log<T, TResult>(Func<T, TResult> func, T input)
+	public class LocationsManager  
 	{
-		Console.WriteLine("input is " + input.ToString());
-		var result = func(input);
-		Console.WriteLine("result is " + result.ToString());
-		return result;
-	}
+		readonly ILocationRepository _locationRepository;
+		readonly IStateValidator _stateValidator;
+		
+		public LocationsManager(ILocationRepository r, IStateValidator v)
+		{
+			_locationRepository = r; 
+			_stateValidator = v;
+		}
 	
-' and the knock on functional languages is that they have all these crazy symbols
-' benefit is that we're guaranteed that the input will fit with the func
+		public void CreateLocation(string city, string state)
+		{
+			if (!_stateValidator.IsValid(state)) 
+				throw new ArgumentException("Not a valid State");
+			_locationRepository.Insert(city, state);
+		}
+	}
+
+' if you have two methods and one of them is the constructor you have a function  - Jack Dietrich
 
 ***
+
+	let createLocation insert validate city state =
+		if validator state
+		then insert city state
+		else raise (System.ArgumentException("Not a valid State"))
+	
+***
+
 
 <section data-background="#5bc0de">
 
@@ -586,13 +602,8 @@ The same code in F#
 		printfn "result is %A" result
 		result
 
+' and the knock on functional languages is that they have all these crazy symbols
 ' now statically checked
-		
-***
-
-<section data-background="#F0AD4E">
-Ok, less code is cool, but I need more than that to learn a new paradigm.
-</section>
 
 ***
 
@@ -627,6 +638,23 @@ http://fsharpforfunandprofit/ddd
 		
 *** 
 
+Discriminated Unions
+	
+	type Option<'T> =
+		| Some of 'T
+		| None
+
+	let foo = Some(2) // Option<int>
+	let bar = Some("hello world") // Option<string>
+	let baz = None // Option<'a>
+
+' Very common DU
+' simplistic view is that it's like null
+' still has type
+
+
+
+***
 
 ## Staying focused on the happy path
 
@@ -751,26 +779,68 @@ How is that possible?
 	// [2,3,4]
 	
 ' our functions aren't written to know about promises
-' then does magic to allow us to work with the underlying structure
+' the then function does magic to allow us to work with the underlying structure
+
+---
+
+	C# .NET 4.5
+	
+	[lang=cs]
+	async Task<int> AddSomeNumbers()
+	{
+		var one = await Task.FromResult(1);
+		var two = await Task.FromResult(2);
+		return one + two;
+	}
+	
+	Javascript ES7 
+	
+	[lang=js]
+	async function getTweetContent() {
+		let tweet = await getJSON('http://twitter.com/mytweet.json');
+		return tweet.Content;
+	}
 
 ***
 
+What is the result type of this function?
+
+	[lang=js]
+	function divide(a, b) {
+		return a / b;
+	}
 	
+' numeric for most cases,  except 0.  
+' throw an exception?
+' return null?
+
+***
 
 	type Option<'T> =
 		| Some of 'T
 		| None
 
-' 
+	let divideBy bottom top =
+		if bottom = 0
+		then None
+		else Some(top/bottom)
+		
+	8 |> divideBy 4;;
+	//int option = Some 2
+	
+	8 |> divideBy 0;;
+	//int option = None
+	
+' typical functional approach
+' uses Option DU we saw earlier
 
 ***
 
-Railway Oriented Programming
-or the Maybe monad
+<section data-background="#F0AD4E">
+What if we want to chain these sorts of operations?
+</section>
 
 ***
-
-Maybe monad in F#
 
 	type MaybeBuilder() =
 		member this.Return(x) = Some x
@@ -779,12 +849,52 @@ Maybe monad in F#
 			| None -> None
 			| Some a -> f a
 
-' live coding MaybeMonad.fsx
+' Return "wraps" a value in the monad
+' Bind takes a non wrapped value 'a and function from 'a to M<'b> and returns M<'b>
 			
 ***
 
+	let divideByWorkflow init x y = 
+		maybe 
+			{
+			let! a = init |> divideBy x
+			let! b = a |> divideBy y
+			return b
+			}
+			
+	divideByWorkflow 12 3 2
+	//int option = Some 2
+
+	divideByWorkflow 12 0 1
+	//int option = None
+
+***
+
+<section data-background="#5bc0de">
+These are all examples of Monads
+</section>
+
+***
+
+	let divideByWorkflow init x y = 
+		maybe 
+			{
+			let! a = init |> divideBy x
+			let! b = a |> divideBy y
+			return b
+			}
+			
+	divideByWorkflow 12 3 2
+	//int option = Some 2
+
+	divideByWorkflow 12 0 1
+	//int option = None
+	
+***
+
+
 <section data-background="#F0AD4E">
-If F# can do Monads, why the fuss over Haskell?
+Aren't Monads a Haskell thing?
 </section>
 
 ***
@@ -834,7 +944,7 @@ How do I choose a functional language?
 * **Erlang / Elixir** - Massive scalability
 
 
-' all languages have pros and console
+' all languages have pros and cons
 ' need 'web scale'? look at Erlang and Elixir
 ' already on .Net? look at F# though Clojure can target clr
 ' already on Java? Clojure and Scala
