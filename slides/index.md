@@ -6,53 +6,44 @@
 
 ***
 
-'s' turns on speaker mode with dual screen
-
-Learning a new paradigm is one of the more difficult things to do in software development. 
-So why would an object oriented developer of 10 years suddenly decide to make the drastic switch to functional programming? 
-In this talk I’ll show you why I started looking for other ways of writing software and why the switch wasn't as sudden or as drastic as it may seem.
-
-We’ll start our journey with C#, discussing SOLID principals and the use of IoC containers. 
-Then we’ll move to JavaScript to see first class functions and closures. 
-Next we'll visit the exciting distributed world of Elixir on the Erlang VM. 
-We'll finish up with F#, seeing type providers, discriminated unions, and maybe even a certain 5 letter M word.
-
-
-***
-## Reducing Developer Friction
-
-#### A Developer’s Journey from OO to FP
-
-<br>
-<br>
-
-###[@ReidNEvans](http://twitter.com/reidnevans)
+- data-state : intro
 
 
 ' good morning
 ' thank you so much for coming today
 ' This is Reducing Developer Friction 
 ' A developer’s journey from OO to FP
-' I’m Reid Evans and you can find me on Twitter @ReidNEvans
-' developing since 95, pro in 04
+
 
 ***
 
 ![Tombras](images/tombras.jpg)
 
+###[@ReidNEvans](http://twitter.com/reidnevans)
+###http://reidev275.azurewebsites.net
+
+' I’m Reid Evans and you can find me on Twitter @ReidNEvans
+' developing since 95, pro in 04
 ' I’m currently a Senior Developer at The Tombras Group
 ' Tombras is a 140+ employee, full-service agency with a digital mindset. 
 ' We are one of the top 35 independent agencies in north america. 
+' 9 months ESPN, Regional Bank website, 2 non trivial web apps for Daimler
 
 ***
 
-Don't be an Expert Beginner
+<section data-background="#5bc0de">
 
-> Someone should write a utility that searches your code base to make sure all the code you copy and paste stays in sync.
+The model you use to view the world shapes the thoughts you are able to think.
 
-http://www.daedtech.com/tag/expert-beginner > @DaedTech
+**@TheBurningMonk**
+</section>
+
+' we're going to start from my beginnings 
+' we'll go into OO, discuss Solid principals and IOC containers
+' we'll discuss why i think functional is a better fit
 
 ***
+
 
 My beginnings in professional development
 
@@ -1045,7 +1036,14 @@ F# Type Providers
 		
 ***
 
-> **@theburningmonk** The model you use to view the world shapes the thoughts you are able to think.
+<section data-background="#5bc0de">
+
+The model you use to view the world shapes the thoughts you are able to think.
+
+**@TheBurningMonk**
+</section>
+
+' If there were parts of this talk you didnt understand 
 
 http://fsharpforfunandprofit.com
 

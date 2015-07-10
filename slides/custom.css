@@ -15,3 +15,15 @@ span.s, span.hljs-string {
 span.hljs-title {
   color: #5bc0de;  
 }
+
+.reveal section img {
+  border: 0;
+  box-shadow: none;
+}
+
+html.intro body {
+	background:url("../images/title.png");
+	background-position:center;
+	background-size: 100%;
+	background-repeat: no-repeat;
+}
