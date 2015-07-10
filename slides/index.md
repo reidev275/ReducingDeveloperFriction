@@ -294,7 +294,7 @@ How do I know if the code I'm writing is any good?
 
 ***
 
-![Interface Segregation Principal](images/isp.jpg)
+![Interface Segregation Principal](images/ISP.jpg)
 
 ***
 
