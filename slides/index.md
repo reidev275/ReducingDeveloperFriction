@@ -39,7 +39,7 @@ The model you use to view the world shapes the thoughts you are able to think.
 </section>
 
 ' we're going to start from my beginnings 
-' we'll go into OO, discuss Solid principals and IOC containers
+' we'll go into OO, discuss Solid principles and IOC containers
 ' we'll discuss why i think functional is a better fit
 
 ***
@@ -254,57 +254,57 @@ How do I know if the code I'm writing is any good?
 
 ***
 
-## Solid principals
+## Solid principles
 
 ***
 
-### Single Responsibility Principal
+### Single Responsibility Principle
 
 ' A method/class/function should have only one reason to change
 
 ***
 
-![Single Responsibility Principal](images/srp.jpg)
+![Single Responsibility Principle](images/srp.jpg)
 
 ***
 
-### Open Closed Principal
+### Open Closed Principle
 
 ' Methods/classes/functions should be open for extension but closed for modification
 
 ***
 
-![Open Closed Principal](images/ocp.jpg)
+![Open Closed Principle](images/ocp.jpg)
 
 ***
 
-### Liskov Substitution Principal
+### Liskov Substitution Principle
 
 ' Parent types should be substitutable by their child types
 
 ***
 
-![Liskov Substitution Principal](images/lsp.jpg)
+![Liskov Substitution Principle](images/lsp.jpg)
 
 ***
 
-### Interface Segregation Principal 
+### Interface Segregation Principle 
 
 ' No client should be forced to depend on methods it does not use
 
 ***
 
-![Interface Segregation Principal](images/ISP.jpg)
+![Interface Segregation Principle](images/ISP.jpg)
 
 ***
 
-### Dependency Inversion Principal
+### Dependency Inversion Principle
 
 ' High level modules should not depend on low level modules
 
 ***
 
-![Dependency Inversion Principal](images/dip.jpg)
+![Dependency Inversion Principle](images/dip.jpg)
 
 ***
 
@@ -452,7 +452,7 @@ Can't I do all of that in Object Oriented code?
 	}
 
 ' I gave a presentation on this last year	
-' now we adhere to SOLID principals
+' now we adhere to SOLID principles
 ' we can test / mock / stub
 ' BUT
 ' go to definition now takes us to the interface
