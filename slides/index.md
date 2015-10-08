@@ -1,4 +1,4 @@
-﻿- title : Reducing Developer Friction
+﻿- title : A Developer's journey from OO to FP
 - description : A Developer's journey from OO to FP
 - author : Reid Evans
 - theme : Simple
@@ -6,13 +6,13 @@
 
 ***
 
-- data-state : intro
+### A Developer's journey from OO to Functional
 
 
+' - data-state : intro
 ' good morning
 ' thank you so much for coming today
-' This is Reducing Developer Friction 
-' A developer’s journey from OO to FP
+' This is A developer’s journey from OO to FP
 
 
 ***
@@ -25,9 +25,10 @@
 ' I’m Reid Evans and you can find me on Twitter @ReidNEvans
 ' developing since 95, pro in 04
 ' I’m currently a Senior Developer at The Tombras Group
-' Tombras is a 140+ employee, full-service agency with a digital mindset. 
+' Tombras is a 150+ employee, full-service agency with a digital mindset. 
 ' We are one of the top 35 independent agencies in north america. 
-' 9 months ESPN, Regional Bank website, 2 non trivial web apps for Daimler
+' 11 months: ESPN, Regional Bank website, 2 non trivial web apps for Daimler
+' currently hiring Front end developer and a Technical Director
 
 ***
 
@@ -40,7 +41,7 @@ The model you use to view the world shapes the thoughts you are able to think.
 
 ' we're going to start from my beginnings 
 ' we'll go into OO, discuss Solid principals and IOC containers
-' we'll discuss why i think functional is a better fit
+' we'll discuss why functional is a better fit for me
 
 ***
 
@@ -262,49 +263,29 @@ How do I know if the code I'm writing is any good?
 
 ' A method/class/function should have only one reason to change
 
-***
-
-![Single Responsibility Principal](images/srp.jpg)
-
-***
+---
 
 ### Open Closed Principal
 
 ' Methods/classes/functions should be open for extension but closed for modification
 
-***
-
-![Open Closed Principal](images/ocp.jpg)
-
-***
+---
 
 ### Liskov Substitution Principal
 
 ' Parent types should be substitutable by their child types
 
-***
-
-![Liskov Substitution Principal](images/lsp.jpg)
-
-***
+---
 
 ### Interface Segregation Principal 
 
 ' No client should be forced to depend on methods it does not use
 
-***
-
-![Interface Segregation Principal](images/ISP.jpg)
-
-***
+---
 
 ### Dependency Inversion Principal
 
 ' High level modules should not depend on low level modules
-
-***
-
-![Dependency Inversion Principal](images/dip.jpg)
 
 ***
 
@@ -479,6 +460,70 @@ Can we stay SOLID without code bloat?
 ***
 
 <section data-background="#5bc0de">
+If you have two methods and one of them is the constructor you have a function
+
+**@JackDied**
+</section>
+
+***
+
+	[lang=cs]
+	public class LocationsManager  
+	{
+		readonly ILocationRepository _locationRepository;
+		readonly IStateValidator _stateValidator;
+		
+		public LocationsManager(ILocationRepository r, IStateValidator v)
+		{
+			_locationRepository = r; 
+			_stateValidator = v;
+		}
+	
+		public void CreateLocation(string city, string state)
+		{
+			if (!_stateValidator.IsValid(state)) 
+				throw new ArgumentException("Not a valid State");
+			_locationRepository.Insert(city, state);
+		}
+	}
+
+' low signal to noise ratio
+' important parts are 14-16, rest is plumbing
+
+***
+
+	let createLocation insert isValid city state =
+		if state |> isValid
+		then insert city state
+		else raise (System.ArgumentException("Not a valid State"))
+		
+' createLocation function that accepts 4 args
+' throwing an error isn't very functional.  We'll revisit
+
+***
+
+<section data-background="#F0AD4E">
+But then how do I use Dependency Injection and IOC containers?
+</section>
+
+***
+
+Partial Application
+
+	let add a b = a + b
+	add 5 2 
+	// 7
+	
+	let addFive = add 5
+	addFive 2
+	// 7
+	
+' passing one arg to a function that takes 2 args 
+' returns a new function that takes 1 arg
+
+***
+
+<section data-background="#5bc0de">
 
 In functional languages, all functions are interfaces
 
@@ -532,40 +577,8 @@ Equivalent* JavaScript
 ' no IOC container needed to manage dependencies
 ' passing functions rather than objects
 ' * => the log function works for any function
-
-***
-
-	[lang=cs]
-	public class LocationsManager  
-	{
-		readonly ILocationRepository _locationRepository;
-		readonly IStateValidator _stateValidator;
-		
-		public LocationsManager(ILocationRepository r, IStateValidator v)
-		{
-			_locationRepository = r; 
-			_stateValidator = v;
-		}
-	
-		public void CreateLocation(string city, string state)
-		{
-			if (!_stateValidator.IsValid(state)) 
-				throw new ArgumentException("Not a valid State");
-			_locationRepository.Insert(city, state);
-		}
-	}
-
-' if you have two methods and one of them is the constructor you have a function  - Jack Dietrich
-
-***
-
-	let createLocation insert validate city state =
-		if validator state
-		then insert city state
-		else raise (System.ArgumentException("Not a valid State"))
 	
 ***
-
 
 <section data-background="#5bc0de">
 
@@ -574,6 +587,8 @@ Functional languages are generic by default
 </section>
 
 ***
+
+Statically checked types in C#
 
 	[lang=cs]
 	public static TResult Log<T, TResult>(Func<T, TResult> func, T input)
@@ -598,10 +613,61 @@ The same code in F#
 
 ***
 
-## Domain Driven Design
+Statically type check your data access
+
+***
+	type LocationInsert = 
+		SqlCommandProvider<
+			"INSERT INTO Locations([State], City)
+			VALUES (@State, @City)", "connectionString">
 	
-' I was not a fan until switching to the functional way
-' doesn't have to mean fat domain models
+	let insertLocation city state =
+		use command = new LocationInsert()
+		command.Execute(state, city)
+		
+' sql is checked at design time against actual db
+' Execute forces correct arguments
+
+***
+
+No more nulls
+
+***
+
+What is the result type of this function?
+
+	[lang=js]
+	function divide(a, b) {
+		return a / b;
+	}
+	
+' numeric for most cases,  except 0.  
+' throw an exception?
+' return null?
+
+***
+
+	type Option<'T> =
+		| Some of 'T
+		| None
+
+	let divideBy bottom top =
+		if bottom = 0
+		then None
+		else Some(top/bottom)
+		
+	8 |> divideBy 4;;
+	//int option = Some 2
+	
+	8 |> divideBy 0;;
+	//int option = None
+	
+' typical functional approach
+' treating nullable explicitly and as the exception
+
+***
+
+Fit your domain on a page
 
 ***
 
@@ -609,7 +675,7 @@ The same code in F#
 		type Suit = Club | Diamond | Spade | Heart
 		
 		type Rank = Two | Three | Four | Five | Six | Seven | Eight
-							| Nine | Ten | Jack | Queen | King | Ace
+						| Nine | Ten | Jack | Queen | King | Ace
 						
 		type Card = Suit * Rank
 		
@@ -629,25 +695,7 @@ http://fsharpforfunandprofit/ddd
 		
 *** 
 
-Discriminated Unions
-	
-	type Option<'T> =
-		| Some of 'T
-		| None
-
-	let foo = Some(2) // Option<int>
-	let bar = Some("hello world") // Option<string>
-	let baz = None // Option<'a>
-
-' Very common DU
-' simplistic view is that it's like null
-' still has type
-
-
-
-***
-
-## Staying focused on the happy path
+Staying focused on the happy path
 
 ***
 
@@ -680,26 +728,6 @@ Happy Path in C#
 
 --- 
 
-	[lang=cs]
-	public void InsertLocation(Location location)
-	{
-		if (!validateRequest(location))
-			throw new ArgumentException("Location not valid");
-		try
-		{
-			db.updateDbFromRequest(location);
-		} 
-		catch (Exception e)
-		{
-			Logger.Log(e);
-			return "Failure";
-		}	
-		email.EmailNearbyCustomers(location);
-		return "Success";
-	}
-	
----	
-
 Unhappy Path in C#
 
 	[lang=cs]
@@ -726,8 +754,8 @@ Unhappy Path in C#
 
 Happy Path in F#
 
-	let executeUseCase = 
-		validateRequest
+	let executeUseCase request = 
+		validateRequest request
 		>>= updateDbFromRequest
 		>>= emailNearbyCustomers
 
@@ -774,7 +802,7 @@ How is that possible?
 
 ---
 
-	C# .NET 4.5
+C# .NET 4.5
 	
 	[lang=cs]
 	async Task<int> AddSomeNumbers()
@@ -783,8 +811,16 @@ How is that possible?
 		var two = await Task.FromResult(2);
 		return one + two;
 	}
+
+F# 
+
+	let workThenWait() = async { 
+		Thread.Sleep(1000)
+		printfn "work done"
+		do! Async.Sleep(1000) 
+		}
 	
-	Javascript ES7 
+Javascript ES7
 	
 	[lang=js]
 	async function getTweetContent() {
@@ -794,16 +830,9 @@ How is that possible?
 
 ***
 
-What is the result type of this function?
-
-	[lang=js]
-	function divide(a, b) {
-		return a / b;
-	}
-	
-' numeric for most cases,  except 0.  
-' throw an exception?
-' return null?
+<section data-background="#5bc0de">
+These are all examples of Monads
+</section>
 
 ***
 
@@ -816,22 +845,38 @@ What is the result type of this function?
 		then None
 		else Some(top/bottom)
 		
-	8 |> divideBy 4;;
+	8 |> divideBy 4
 	//int option = Some 2
 	
-	8 |> divideBy 0;;
+	8 |> divideBy 0
 	//int option = None
 	
-' typical functional approach
-' uses Option DU we saw earlier
+' Option type from earlier
+' How do we chain them?
+' divideBy takes ints and returns an int option
 
 ***
 
-<section data-background="#F0AD4E">
-What if we want to chain these sorts of operations?
-</section>
+Chaining Option<'T>
 
+	let divideByWorkflow init x y = maybe {
+		let! a = init |> divideBy x
+		let! b = a |> divideBy y
+		return b
+		}
+			
+	divideByWorkflow 12 3 2
+	//int option = Some 2
+
+	divideByWorkflow 12 0 1
+	//int option = None
+
+' a and b are now ints.  
+' if either return none the whole function returns none
+	
 ***
+
+Defining Maybe
 
 	type MaybeBuilder() =
 		member this.Return(x) = Some x
@@ -839,19 +884,19 @@ What if we want to chain these sorts of operations?
 			match x with
 			| None -> None
 			| Some a -> f a
+	
+	let maybe = new MaybeBuilder()
 
 ' Return "wraps" a value in the monad
 ' Bind takes a non wrapped value 'a and function from 'a to M<'b> and returns M<'b>
 			
 ***
 
-	let divideByWorkflow init x y = 
-		maybe 
-			{
-			let! a = init |> divideBy x
-			let! b = a |> divideBy y
-			return b
-			}
+	let divideByWorkflow init x y = maybe {
+		let! a = init |> divideBy x
+		let! b = a |> divideBy y
+		return b
+		}
 			
 	divideByWorkflow 12 3 2
 	//int option = Some 2
@@ -860,29 +905,6 @@ What if we want to chain these sorts of operations?
 	//int option = None
 
 ***
-
-<section data-background="#5bc0de">
-These are all examples of Monads
-</section>
-
-***
-
-	let divideByWorkflow init x y = 
-		maybe 
-			{
-			let! a = init |> divideBy x
-			let! b = a |> divideBy y
-			return b
-			}
-			
-	divideByWorkflow 12 3 2
-	//int option = Some 2
-
-	divideByWorkflow 12 0 1
-	//int option = None
-	
-***
-
 
 <section data-background="#F0AD4E">
 Aren't Monads a Haskell thing?
@@ -904,7 +926,7 @@ Monad in Haskell
 	[lang=haskell]
 	class Monad m where {
 	  (>>=)  :: m a -> (a -> m b) -> m b
-	  return :: a                 -> m a
+	  return :: a  -> m a
 	} 	
 	
 ' the Fsharp example is for a specific monad
@@ -943,53 +965,12 @@ How do I choose a functional language?
 
 ***
 
-F# Type Providers
-
-***
-
-	[lang=cs]
-	public void Insert(string city, string state)
-	{
-		using (var con = new SqlConnection(Global.ConnectionString))
-		using (var command = con.CreateCommand()) {
-			command.CommandText = 
-				@"Insert into Locations ([State], City)
-				  Values(@State, @City)";
-				  
-			command.Parameters.AddWithValue("State", state);
-			command.Parameters.AddWithValue("City", city);  
-				  
-			con.Open();
-			command.ExecuteNonQuery();
-		}
-	}
-
-' using ado
-' it would have taken me a test to know State required the brackets
-	
-***
-
-	type LocationInsert = 
-		SqlCommandProvider<
-			"INSERT INTO Locations([State], City)
-			VALUES (@State, @City)", "connectionString">
-	
-	let insertLocation city state =
-		use command = new LocationInsert()
-		command.Execute(state, city)
-		
-' sql is checked at design time against actual db
-' Execute forces correct arguments
-' view live code demo
-
-***
-
 ## Anecdotal Results of switching to FP
 
 * Social dealer management system for Freightliner
-* 2 months development
-* 2,000 lines of code
-* 2 bugs not caught at design / compile time
+* 4 months development
+* 3,582 lines of code
+* 2 bugs not caught at compile time
 
 ---
 
@@ -1020,19 +1001,6 @@ F# Type Providers
 
 ' Too many open commands 
 ' Seq is lazy evaluated so by returning it the runtime wasn't sure when to dispose of the query
-
----
-
-	type GetChildObjects = 
-		SqlCommandProvider<
-			"Select * FROM ChildTable where parentId = @id", "connectionString">
-			
-	let getChildObjects parentId = 
-		use query = new GetChildObjects()
-		query.Execute(parentId)
-		|> Seq.map (fun x -> { Id = x.Id; Name = x.Name })
-		|> Seq.toList
-
 		
 ***
 
@@ -1044,6 +1012,12 @@ The model you use to view the world shapes the thoughts you are able to think.
 </section>
 
 ' If there were parts of this talk you didnt understand 
+
+***
+
+###[@ReidNEvans](http://twitter.com/reidnevans)
+
+Links
 
 http://fsharpforfunandprofit.com
 
