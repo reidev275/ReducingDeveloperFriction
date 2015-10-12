@@ -118,10 +118,10 @@ What if I want to do the same thing from a different event?
 	[lang=cs]
 	void button1_Click(object sender, System.EventArgs e)
 	{
-		CreateLocation(tbCity.Text, tbState.Text);
+		CreateLocation();
 	}
 	
-	void CreateLocation(string city, string state)
+	void CreateLocation()
 	{
 		using (var con = new SqlConnection("MyDb"))
 		using (var command = con.CreateCommand())
@@ -130,8 +130,8 @@ What if I want to do the same thing from a different event?
 				@"Insert into Locations ([State], City)
 				  Values(@State, @City)";
 				  
-			command.Parameters.AddWithValue("State", state);
-			command.Parameters.AddWithValue("City", city);  
+			command.Parameters.AddWithValue("State", tbState.Text);
+			command.Parameters.AddWithValue("City", tbCity.Text);  
 				  
 			con.Open();
 			command.ExecuteNonQuery();
@@ -140,7 +140,6 @@ What if I want to do the same thing from a different event?
 
 ' Procedural Programming
 ' this seems simple but moving to procedural code is a paradigm shift
-' CreateLocation can be placed anywhere now.  It is no longer tied to the form
 
 ***
 	
@@ -754,8 +753,8 @@ Unhappy Path in C#
 
 Happy Path in F#
 
-	let executeUseCase request = 
-		validateRequest request
+	let insertLocation = 
+		validateRequest
 		>>= updateDbFromRequest
 		>>= emailNearbyCustomers
 
@@ -763,7 +762,7 @@ Happy Path in F#
 
 Unhappy Path in F#
 
-	let executeUseCase = 
+	let insertLocation = 
 		validateRequest
 		>>= updateDbFromRequest
 		>>= emailNearbyCustomers
