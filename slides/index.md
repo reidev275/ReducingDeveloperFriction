@@ -256,35 +256,11 @@ How do I know if the code I'm writing is any good?
 
 ## Solid principals
 
-***
-
-### Single Responsibility Principal
-
-' A method/class/function should have only one reason to change
-
----
-
-### Open Closed Principal
-
-' Methods/classes/functions should be open for extension but closed for modification
-
----
-
-### Liskov Substitution Principal
-
-' Parent types should be substitutable by their child types
-
----
-
-### Interface Segregation Principal 
-
-' No client should be forced to depend on methods it does not use
-
----
-
-### Dependency Inversion Principal
-
-' High level modules should not depend on low level modules
+* Single Responsibility Principal
+* Open Closed Principal
+* Liskov Substitution Principal
+* Interface Segregation Principal 
+* Dependency Inversion Principal
 
 ***
 
@@ -431,7 +407,6 @@ Can't I do all of that in Object Oriented code?
 		}
 	}
 
-' I gave a presentation on this last year	
 ' now we adhere to SOLID principals
 ' we can test / mock / stub
 ' BUT
@@ -459,7 +434,7 @@ Can we stay SOLID without code bloat?
 ***
 
 <section data-background="#5bc0de">
-If you have two methods and one of them is the constructor you have a function
+If you have a class with two methods and one of them is the constructor you have a function
 
 **@JackDied**
 </section>
@@ -663,34 +638,6 @@ What is the result type of this function?
 	
 ' typical functional approach
 ' treating nullable explicitly and as the exception
-
-***
-
-Fit your domain on a page
-
-***
-
-	module CardGame = 
-		type Suit = Club | Diamond | Spade | Heart
-		
-		type Rank = Two | Three | Four | Five | Six | Seven | Eight
-						| Nine | Ten | Jack | Queen | King | Ace
-						
-		type Card = Suit * Rank
-		
-		type Hand = Card list
-		type Deck = Card list
-		
-		type Player = { Name: string; Hand: Hand }
-		type Game = { Deck: Deck; Players: Player list }
-		
-		type Deal = Deck -> (Deck * Card)
-		type PickupCard = (Hand * Card) -> Hand
-		
-
-http://fsharpforfunandprofit/ddd
-
-' make illegal states unrepresentable
 		
 *** 
 
@@ -1015,6 +962,8 @@ The model you use to view the world shapes the thoughts you are able to think.
 ***
 
 ###[@ReidNEvans](http://twitter.com/reidnevans)
+
+http://reidev275.azurewebsites.net
 
 Links
 
