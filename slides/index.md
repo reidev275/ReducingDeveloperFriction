@@ -32,6 +32,17 @@
 
 ***
 
+Overview
+
+* OO design patterns
+* SOLID principles
+* Code Bloat
+* Statically type check all the things
+* Staying focused on the happy path
+* Results
+
+***
+
 <section data-background="#5bc0de">
 
 The model you use to view the world shapes the thoughts you are able to think.
@@ -40,11 +51,10 @@ The model you use to view the world shapes the thoughts you are able to think.
 </section>
 
 ' we're going to start from my beginnings 
-' we'll go into OO, discuss Solid principals and IOC containers
+' we'll go into OO, discuss Solid principles and IOC containers
 ' we'll discuss why functional is a better fit for me
 
 ***
-
 
 My beginnings in professional development
 
@@ -472,6 +482,7 @@ If you have a class with two methods and one of them is the constructor you have
 		else raise (System.ArgumentException("Not a valid State"))
 		
 ' createLocation function that accepts 4 args
+' closures are the poor man's objects :)
 ' throwing an error isn't very functional.  We'll revisit
 
 ***
@@ -554,14 +565,6 @@ Equivalent* JavaScript
 	
 ***
 
-<section data-background="#5bc0de">
-
-Functional languages are generic by default
-
-</section>
-
-***
-
 Statically checked types in C#
 
 	[lang=cs]
@@ -586,62 +589,28 @@ The same code in F#
 ' now statically checked
 
 ***
-
+<section data-background="#5bc0de">
 Statically type check your data access
+</section>
 
 ***
 	type LocationInsert = 
 		SqlCommandProvider<
-			"INSERT INTO Locations([State], City)
-			VALUES (@State, @City)", "connectionString">
+			"INSERT INTO Locations(State, City, [Date])
+			VALUES (@State, @City, @Date)", "connectionString">
 	
-	let insertLocation city state =
+	let insertLocation city state date =
 		use command = new LocationInsert()
-		command.Execute(state, city)
+		command.Execute(state, city, date)
 		
 ' sql is checked at design time against actual db
 ' Execute forces correct arguments
 
 ***
 
-No more nulls
-
-***
-
-What is the result type of this function?
-
-	[lang=js]
-	function divide(a, b) {
-		return a / b;
-	}
-	
-' numeric for most cases,  except 0.  
-' throw an exception?
-' return null?
-
-***
-
-	type Option<'T> =
-		| Some of 'T
-		| None
-
-	let divideBy bottom top =
-		if bottom = 0
-		then None
-		else Some(top/bottom)
-		
-	8 |> divideBy 4;;
-	//int option = Some 2
-	
-	8 |> divideBy 0;;
-	//int option = None
-	
-' typical functional approach
-' treating nullable explicitly and as the exception
-		
-*** 
-
+<section data-background="#5bc0de">
 Staying focused on the happy path
+</section>
 
 ***
 
@@ -757,14 +726,6 @@ C# .NET 4.5
 		var two = await Task.FromResult(2);
 		return one + two;
 	}
-
-F# 
-
-	let workThenWait() = async { 
-		Thread.Sleep(1000)
-		printfn "work done"
-		do! Async.Sleep(1000) 
-		}
 	
 Javascript ES7
 	
@@ -797,7 +758,6 @@ These are all examples of Monads
 	8 |> divideBy 0
 	//int option = None
 	
-' Option type from earlier
 ' How do we chain them?
 ' divideBy takes ints and returns an int option
 
@@ -819,102 +779,13 @@ Chaining Option<'T>
 
 ' a and b are now ints.  
 ' if either return none the whole function returns none
-	
-***
-
-Defining Maybe
-
-	type MaybeBuilder() =
-		member this.Return(x) = Some x
-		member this.Bind(x, f) = 
-			match x with
-			| None -> None
-			| Some a -> f a
-	
-	let maybe = new MaybeBuilder()
-
-' Return "wraps" a value in the monad
-' Bind takes a non wrapped value 'a and function from 'a to M<'b> and returns M<'b>
-			
-***
-
-	let divideByWorkflow init x y = maybe {
-		let! a = init |> divideBy x
-		let! b = a |> divideBy y
-		return b
-		}
-			
-	divideByWorkflow 12 3 2
-	//int option = Some 2
-
-	divideByWorkflow 12 0 1
-	//int option = None
-
-***
-
-<section data-background="#F0AD4E">
-Aren't Monads a Haskell thing?
-</section>
-
-***
-
-Monad in F#
-	
-	type MaybeBuilder() =
-		member this.Return(x) = Some x
-		member this.Bind(x, f) = 
-			match x with
-			| None -> None
-			| Some a -> f a
-	
-Monad in Haskell
-	
-	[lang=haskell]
-	class Monad m where {
-	  (>>=)  :: m a -> (a -> m b) -> m b
-	  return :: a  -> m a
-	} 	
-	
-' the Fsharp example is for a specific monad
-' the Haskell version is generic and accepts any monad
-' not generic type classes like Haskell
-
-***
-
-Equivalent Haskell Monad in F#
-
-	type Monad<'M> =
-		abstract member bind : 'M<'a> -> ('a -> 'M<'b>) -> 'M<'b>
-		abstract member ``return`` : 'a -> 'M<'a>
-
-	//error FS0712: Type parameter cannot be used as type constructor
-
-***
-
-<section data-background="#F0AD4E">
-How do I choose a functional language?
-</section>
-
-***
-
-* **Haskell** - Pure language
-* **Clojure** - A Lisp on JVM
-* **F#** - Functional first on CLR / .NET
-* **Erlang / Elixir** - Massive scalability
-
-
-' all languages have pros and cons
-' need 'web scale'? look at Erlang and Elixir
-' already on .Net? look at F# though Clojure can target clr
-' already on Java? Clojure and Scala
-' want a pure language? try Haskell
 
 ***
 
 ## Anecdotal Results of switching to FP
 
 * Social dealer management system for Freightliner
-* 4 months development
+* 5 months development
 * 3,582 lines of code
 * 2 bugs not caught at compile time
 
