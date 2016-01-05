@@ -7,7 +7,8 @@
 ***
 
 ### A Developer's journey from OO to Functional
-
+####[@ReidNEvans](http://twitter.com/reidnevans)
+####http://reidev275.azurewebsites.net
 
 ' - data-state : intro
 ' good morning
@@ -18,17 +19,27 @@
 ***
 
 ![Tombras](images/tombras.jpg)
+###http://www.tombras.com
 
-###[@ReidNEvans](http://twitter.com/reidnevans)
-###http://reidev275.azurewebsites.net
+* Daimler
+* ESPN
+* McDonalds
+* Michelin
 
-' I’m Reid Evans and you can find me on Twitter @ReidNEvans
-' developing since 95, pro in 04
 ' I’m currently a Senior Developer at The Tombras Group
 ' Tombras is a 150+ employee, full-service agency with a digital mindset. 
 ' We are one of the top 35 independent agencies in north america. 
 ' 11 months: ESPN, Regional Bank website, 2 non trivial web apps for Daimler
-' currently hiring Front end developer and a Technical Director
+
+---
+
+###Currently Hiring
+
+* Front end developer
+* Technical Director
+* QA
+
+' currently hiring Front end developer, Technical Director, QA
 
 ***
 
