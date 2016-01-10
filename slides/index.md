@@ -619,6 +619,45 @@ Statically type check your data access
 
 ***
 
+No more nulls
+
+***
+
+What is the result type of this function?
+
+	[lang=js]
+	function divide(a, b) {
+		return a / b;
+	}
+	
+' numeric for most cases,  except 0.  
+' throw an exception?
+' return null?
+
+***
+
+	type Option<'T> =
+		| Some of 'T
+		| None
+
+	let divideBy bottom top =
+		if bottom = 0
+		then None
+		else Some(top/bottom)
+		
+	8 |> divideBy 4;;
+	//int option = Some 2
+	
+	8 |> divideBy 0;;
+	//int option = None
+	
+' typical functional approach
+' treating nullable explicitly and as the exception
+		
+*** 
+
+
+
 <section data-background="#5bc0de">
 Staying focused on the happy path
 </section>
@@ -792,6 +831,97 @@ Chaining Option<'T>
 ' if either return none the whole function returns none
 
 ***
+
+Defining Maybe
+
+	type MaybeBuilder() =
+		member this.Return(x) = Some x
+		member this.Bind(x, f) = 
+			match x with
+			| None -> None
+			| Some a -> f a
+	
+	let maybe = new MaybeBuilder()
+
+' Return "wraps" a value in the monad
+' Bind takes a non wrapped value 'a and function from 'a to M<'b> and returns M<'b>
+			
+***
+
+	let divideByWorkflow init x y = maybe {
+		let! a = init |> divideBy x
+		let! b = a |> divideBy y
+		return b
+		}
+			
+	divideByWorkflow 12 3 2
+	//int option = Some 2
+
+	divideByWorkflow 12 0 1
+	//int option = None
+
+***
+
+<section data-background="#F0AD4E">
+Aren't Monads a Haskell thing?
+</section>
+
+***
+
+Monad in F#
+	
+	type MaybeBuilder() =
+		member this.Return(x) = Some x
+		member this.Bind(x, f) = 
+			match x with
+			| None -> None
+			| Some a -> f a
+	
+Monad in Haskell
+	
+	[lang=haskell]
+	class Monad m where {
+	  (>>=)  :: m a -> (a -> m b) -> m b
+	  return :: a  -> m a
+	} 	
+	
+' the Fsharp example is for a specific monad
+' the Haskell version is generic and accepts any monad
+' not generic type classes like Haskell
+
+***
+
+Equivalent Haskell Monad in F#
+
+	type Monad<'M> =
+		abstract member bind : 'M<'a> -> ('a -> 'M<'b>) -> 'M<'b>
+		abstract member ``return`` : 'a -> 'M<'a>
+
+	//error FS0712: Type parameter cannot be used as type constructor
+
+***
+
+<section data-background="#F0AD4E">
+How do I choose a functional language?
+</section>
+
+***
+
+* **Haskell** - Pure language
+* **Clojure** - A Lisp on JVM
+* **F#** - Functional first on CLR / .NET
+* **Erlang / Elixir** - Massive scalability
+
+
+' all languages have pros and cons
+' need 'web scale'? look at Erlang and Elixir
+' already on .Net? look at F# though Clojure can target clr
+' already on Java? Clojure and Scala
+' want a pure language? try Haskell
+
+***
+
+
 
 ## Anecdotal Results of switching to FP
 
