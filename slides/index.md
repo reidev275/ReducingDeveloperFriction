@@ -8,7 +8,7 @@
 
 ### A Developer's journey from OO to Functional
 ####[@ReidNEvans](http://twitter.com/reidnevans)
-####http://reidev275.azurewebsites.net
+####http://reidevans.tech
 
 ' - data-state : intro
 ' good morning
@@ -975,7 +975,7 @@ The model you use to view the world shapes the thoughts you are able to think.
 
 ###[@ReidNEvans](http://twitter.com/reidnevans)
 
-http://reidev275.azurewebsites.net
+http://reidevans.tech
 
 Links
 
