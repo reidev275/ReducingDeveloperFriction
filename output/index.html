@@ -1,0 +1,1897 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>A Developer's journey from OO to FP</title>
+    <meta name="description" content="A Developer's journey from OO to FP">
+    <meta name="author" content="Reid Evans">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="//code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="//code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/Simple.css" id="theme">
+    <link type="text/css" rel="stylesheet" href="fsharp.formatting/styles/style.css" />
+    <link type="text/css" rel="stylesheet" href="fsharp.formatting/styles/deedle.css" />
+    <link type="text/css" rel="stylesheet" href="css/custom.css" />
+    <script src="fsharp.formatting/styles/tips.js" type="text/javascript"></script>
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+    <link rel="stylesheet" href="css/fsreveal.css">
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+    </script>
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+    <script language="javascript" type="text/javascript">
+        function init()
+        {
+            websocket = new WebSocket("ws://localhost:8083/websocket");
+            websocket.onmessage = function(evt) { location.reload(); };
+        }
+        window.addEventListener("load", init, false);
+    </script>
+</head>
+<body>
+    <div class="reveal">
+        <div class="tip" id="fs1">val createLocation : insert:(&#39;a -&gt; &#39;b -&gt; &#39;c) -&gt; isValid:(&#39;b -&gt; bool) -&gt; city:&#39;a -&gt; state:&#39;b -&gt; &#39;c<br /><br />Full name: index.createLocation</div>
+<div class="tip" id="fs2">val insert : (&#39;a -&gt; &#39;b -&gt; &#39;c)</div>
+<div class="tip" id="fs3">val isValid : (&#39;b -&gt; bool)</div>
+<div class="tip" id="fs4">val city : &#39;a</div>
+<div class="tip" id="fs5">val state : &#39;b</div>
+<div class="tip" id="fs6">val raise : exn:System.Exception -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.Operators.raise</div>
+<div class="tip" id="fs7">namespace System</div>
+<div class="tip" id="fs8">Multiple items<br />type ArgumentException =<br />&#160;&#160;inherit SystemException<br />&#160;&#160;new : unit -&gt; ArgumentException + 4 overloads<br />&#160;&#160;member GetObjectData : info:SerializationInfo * context:StreamingContext -&gt; unit<br />&#160;&#160;member Message : string<br />&#160;&#160;member ParamName : string<br /><br />Full name: System.ArgumentException<br /><br />--------------------<br />System.ArgumentException() : unit<br />System.ArgumentException(message: string) : unit<br />System.ArgumentException(message: string, innerException: exn) : unit<br />System.ArgumentException(message: string, paramName: string) : unit<br />System.ArgumentException(message: string, paramName: string, innerException: exn) : unit</div>
+<div class="tip" id="fs9">val add : a:int -&gt; b:int -&gt; int<br /><br />Full name: index.add</div>
+<div class="tip" id="fs10">val a : int</div>
+<div class="tip" id="fs11">val b : int</div>
+<div class="tip" id="fs12">val addFive : (int -&gt; int)<br /><br />Full name: index.addFive</div>
+<div class="tip" id="fs13">val log : func:(&#39;a -&gt; &#39;b) -&gt; input:&#39;a -&gt; &#39;b<br /><br />Full name: index.log</div>
+<div class="tip" id="fs14">val func : (&#39;a -&gt; &#39;b)</div>
+<div class="tip" id="fs15">val input : &#39;a</div>
+<div class="tip" id="fs16">val printfn : format:Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.printfn</div>
+<div class="tip" id="fs17">val result : &#39;b</div>
+<div class="tip" id="fs18">type LocationInsert = obj<br /><br />Full name: index.LocationInsert</div>
+<div class="tip" id="fs19">val insertLocation : city:&#39;a -&gt; state:&#39;b -&gt; date:&#39;c -&gt; &#39;d<br /><br />Full name: index.insertLocation</div>
+<div class="tip" id="fs20">val date : &#39;c</div>
+<div class="tip" id="fs21">val command : LocationInsert</div>
+<div class="tip" id="fs22">Multiple items<br />module Option<br /><br />from Microsoft.FSharp.Core<br /><br />--------------------<br />type Option&lt;&#39;T&gt; =<br />&#160;&#160;| Some of &#39;T<br />&#160;&#160;| None<br /><br />Full name: index.Option&lt;_&gt;</div>
+<div class="tip" id="fs23">union case Option.Some: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
+<div class="tip" id="fs24">union case Option.None: Option&lt;&#39;T&gt;</div>
+<div class="tip" id="fs25">val divideBy : bottom:int -&gt; top:int -&gt; Option&lt;int&gt;<br /><br />Full name: index.divideBy</div>
+<div class="tip" id="fs26">val bottom : int</div>
+<div class="tip" id="fs27">val top : int</div>
+<div class="tip" id="fs28">val insertLocation : obj<br /><br />Full name: index.insertLocation</div>
+<div class="tip" id="fs29">val query : Linq.QueryBuilder<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.query</div>
+<div class="tip" id="fs30">module Seq<br /><br />from Microsoft.FSharp.Collections</div>
+<div class="tip" id="fs31">val map : mapping:(&#39;T -&gt; &#39;U) -&gt; source:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;U&gt;<br /><br />Full name: Microsoft.FSharp.Collections.Seq.map</div>
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            <section >
+
+<h3>A Developer's journey from OO to Functional</h3>
+
+<h4><a href="http://twitter.com/reidnevans">@ReidNEvans</a></h4>
+
+<h4><a href="http://reidevans.tech">http://reidevans.tech</a></h4>
+
+<aside class="notes">
+- data-state : intro<br/>
+good morning<br/>
+thank you so much for coming today<br/>
+This is A developer’s journey from OO to FP<br/>
+</aside>
+
+</section>
+
+<section >
+
+<section >
+
+<p><img src="images/tombras.jpg" alt="Tombras" /></p>
+
+<h3><a href="http://www.tombras.com">http://www.tombras.com</a></h3>
+
+<ul>
+<li>Daimler</li>
+<li>ESPN</li>
+<li>McDonalds</li>
+<li>Michelin</li>
+</ul>
+
+<aside class="notes">
+I’m currently a Senior Developer at The Tombras Group<br/>
+Tombras is a 150+ employee, full-service agency with a digital mindset. <br/>
+We are one of the top 35 independent agencies in north america. <br/>
+11 months: ESPN, Regional Bank website, 2 non trivial web apps for Daimler<br/>
+</aside>
+
+</section>
+
+<section author="Reid Evans" description="A Developer's journey from OO to FP" theme="Simple" title="A Developer's journey from OO to FP" transition="Fade">
+
+<h3>Currently Hiring</h3>
+
+<ul>
+<li>Front end developer</li>
+<li>Technical Director</li>
+<li>QA</li>
+</ul>
+
+<aside class="notes">
+currently hiring Front end developer, Technical Director, QA<br/>
+</aside>
+
+</section>
+
+</section>
+
+<section >
+
+<p>Overview</p>
+
+<ul>
+<li>OO design patterns</li>
+<li>SOLID principles</li>
+<li>Code Bloat</li>
+<li>Statically type check all the things</li>
+<li>Staying focused on the happy path</li>
+<li>Results</li>
+</ul>
+
+</section>
+
+<section >
+
+<section data-background="#5bc0de">
+
+<p>The model you use to view the world shapes the thoughts you are able to think.</p>
+
+<p><strong>@TheBurningMonk</strong>
+</section></p>
+
+<aside class="notes">
+we're going to start from my beginnings <br/>
+we'll go into OO, discuss Solid principles and IOC containers<br/>
+we'll discuss why functional is a better fit for me<br/>
+</aside>
+
+</section>
+
+<section >
+
+<p>My beginnings in professional development</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="pascal">procedure TForm1.Button1Click(Sender: TObject);
+begin
+    Label1.Caption := 'Hello World';
+end;
+</code></pre></td></tr></table>
+
+<aside class="notes">
+hello world in Delphi<br/>
+... which then leads us to complex data stuff in Delphi<br/>
+</aside>
+
+</section>
+
+<section >
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="pascal">procedure TForm1.Button1Click(Sender: TObject);
+begin
+    Locations := TTable.Create(Self);
+    with Locations do
+    begin
+        DatabaseName := 'MyDB';
+        TableName := 'MyTable';
+        Open;
+
+        Append;
+        FieldByName('City').Value := cityEdit.Text;
+        FieldByName('State').Value := stateEdit.Text;
+        Post;
+
+        Close;          
+    end;
+end;
+</code></pre></td></tr></table>
+
+<aside class="notes">
+in the UI we're opening a db connection to a table <br/>
+we're appending, setting some values and saving<br/>
+1 layer, very rapid development, very difficult maintenance<br/>
+anyone had any experience with Delphi?  Anders Hejlsberg's work pre msft and C#<br/>
+so then I hear all this amazing stuff about .net<br/>
+</aside>
+
+</section>
+
+<section >
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">void</span> button1_Click(<span class="k">object</span> sender, System.EventArgs e)
+{
+    <span class="k">using</span> (<span class="k">var</span> con <span class="o">=</span> <span class="k">new</span> SqlConnection(<span class="s">"MyDb"</span>))
+    <span class="k">using</span> (<span class="k">var</span> command <span class="o">=</span> con.CreateCommand())
+    {
+        command.CommandText <span class="o">=</span> 
+            <span class="s">@"Insert into Locations ([State], City)
+              Values(@State, @City)"</span>;
+
+        command.Parameters.AddWithValue(<span class="s">"City"</span>, textboxCity.Text);
+        command.Parameters.AddWithValue(<span class="s">"State"</span>, textboxState.Text);  
+
+        con.Open();
+        command.ExecuteNonQuery();
+    }       
+}
+</code></pre></td></tr></table>
+
+<aside class="notes">
+reduced LOC because of better api - SQL<br/>
+still Event Driven Programming<br/>
+</aside>
+
+</section>
+
+<section >
+
+<section data-background="#F0AD4E">
+What if I want to do the same thing from a different event?
+</section>
+
+</section>
+
+<section >
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">void</span> button1_Click(<span class="k">object</span> sender, System.EventArgs e)
+{
+    CreateLocation();
+}
+
+<span class="k">void</span> CreateLocation()
+{
+    <span class="k">using</span> (<span class="k">var</span> con <span class="o">=</span> <span class="k">new</span> SqlConnection(<span class="s">"MyDb"</span>))
+    <span class="k">using</span> (<span class="k">var</span> command <span class="o">=</span> con.CreateCommand())
+    {
+        command.CommandText <span class="o">=</span> 
+            <span class="s">@"Insert into Locations ([State], City)
+              Values(@State, @City)"</span>;
+
+        command.Parameters.AddWithValue(<span class="s">"State"</span>, tbState.Text);
+        command.Parameters.AddWithValue(<span class="s">"City"</span>, tbCity.Text);  
+
+        con.Open();
+        command.ExecuteNonQuery();
+    }
+}
+</code></pre></td></tr></table>
+
+<aside class="notes">
+Procedural Programming<br/>
+this seems simple but moving to procedural code is a paradigm shift<br/>
+</aside>
+
+</section>
+
+<section >
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">public</span> <span class="k">class</span> LocationsManager  
+{
+    <span class="k">public</span> <span class="k">void</span> CreateLocation(<span class="k">string</span> city, <span class="k">string</span> state) 
+    {
+        <span class="k">if</span> (!States.Contains(state)) <span class="k">throw</span> <span class="k">new</span> ArgumentException()
+
+        <span class="k">using</span> (<span class="k">var</span> con <span class="o">=</span> <span class="k">new</span> SqlConnection(<span class="s">"MyDb"</span>))
+        <span class="k">using</span> (<span class="k">var</span> command <span class="o">=</span> con.CreateCommand()) {
+            command.CommandText <span class="o">=</span> 
+                <span class="s">@"Insert into Locations ([State], City)
+                  Values(@State, @City)"</span>;
+
+            command.Parameters.AddWithValue(<span class="s">"State"</span>, state);
+            command.Parameters.AddWithValue(<span class="s">"City"</span>, city);  
+
+            con.Open();
+            command.ExecuteNonQuery();
+        }
+    }
+}
+</code></pre></td></tr></table>
+
+<aside class="notes">
+still procedural / imperative but no longer has any ties to the UI<br/>
+data validation and data persistence in a single method<br/>
+</aside>
+
+</section>
+
+<section >
+
+<section data-background="#F0AD4E">
+How should all this code fit together?
+</section>
+
+</section>
+
+<section >
+
+<h3>OO Design patterns</h3>
+
+</section>
+
+<section >
+
+<p>Factory</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">public</span> <span class="k">class</span> Factory
+{
+    <span class="k">public</span> IFoo GetImplementation(MyEnum <span class="k">enum</span>)
+    {
+        <span class="k">switch</span> (<span class="k">enum</span>)
+        {
+            <span class="k">case</span> MyEnum.Foo <span class="o">:</span> <span class="k">return</span> <span class="k">new</span> Foo();
+            <span class="k">case</span> MyEnum.Bar <span class="o">:</span> <span class="k">return</span> <span class="k">new</span> Bar();
+            <span class="k">default</span>: <span class="k">return</span> <span class="k">null</span>;
+        }
+    }
+}
+</code></pre></td></tr></table>
+
+<aside class="notes">
+here we return the abstraction<br/>
+</aside>
+
+</section>
+
+<section >
+
+<p>Strategy</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">public</span> <span class="k">class</span> LocationsManager  
+{
+    <span class="k">readonly</span> ILocationRepository _locationRepository;
+
+    <span class="k">public</span> LocationsManager(ILocationRepository locationRepository)
+    {
+        _locationRepository <span class="o">=</span> locationRepository;
+    }
+
+    <span class="k">public</span> <span class="k">void</span> CreateLocation(<span class="k">string</span> city, <span class="k">string</span> state)
+    {
+        _locationRepository.Insert(city, state);
+    }
+}
+</code></pre></td></tr></table>
+
+<aside class="notes">
+here we're dependent upon the abstraction to do work<br/>
+</aside>
+
+</section>
+
+<section >
+
+<p>Command</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">public</span> <span class="k">interface</span> ICommand
+{
+    <span class="k">void</span> Execute();
+}
+</code></pre></td></tr></table>
+
+<aside class="notes">
+here the whole thing is an abstraction<br/>
+</aside>
+
+</section>
+
+<section >
+
+<section data-background="#5bc0de">
+
+<p>Design patterns are just terms to define how an abstraction is passed around in code</p>
+
+<aside class="notes">
+they are an answer, but not to the question I really had<br/>
+</aside>
+
+</section>
+
+</section>
+
+<section >
+
+<section data-background="#F0AD4E">
+
+<p>How do I know if the code I'm writing is any good?</p>
+
+</section>
+
+<aside class="notes">
+you can write really bad code using really good patterns and vice versa<br/>
+</aside>
+
+</section>
+
+<section >
+
+<h2>Solid principals</h2>
+
+<ul>
+<li>Single Responsibility Principal</li>
+<li>Open Closed Principal</li>
+<li>Liskov Substitution Principal</li>
+<li>Interface Segregation Principal</li>
+<li>Dependency Inversion Principal</li>
+</ul>
+
+</section>
+
+<section >
+
+<section data-background="#F0AD4E">
+Can't I do all of that in Object Oriented code?
+</section>
+
+</section>
+
+<section >
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">public</span> <span class="k">class</span> LocationsManager  
+{
+    <span class="k">public</span> <span class="k">void</span> CreateLocation(<span class="k">string</span> city, <span class="k">string</span> state) 
+    {
+        <span class="k">if</span> (!States.Contains(state)) <span class="k">throw</span> <span class="k">new</span> ArgumentException()
+
+        <span class="k">using</span> (<span class="k">var</span> con <span class="o">=</span> <span class="k">new</span> SqlConnection(<span class="s">"MyDb"</span>))
+        <span class="k">using</span> (<span class="k">var</span> command <span class="o">=</span> con.CreateCommand()) {
+            command.CommandText <span class="o">=</span> 
+                <span class="s">@"Insert into Locations ([State], City)
+                  Values(@State, @City)"</span>;
+
+            command.Parameters.AddWithValue(<span class="s">"State"</span>, state);
+            command.Parameters.AddWithValue(<span class="s">"City"</span>, city);  
+
+            con.Open();
+            command.ExecuteNonQuery();
+        }
+    }
+}
+</code></pre></td></tr></table>
+
+<aside class="notes">
+locationsManager from earlier<br/>
+</aside>
+
+</section>
+
+<section >
+
+<section >
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">public</span> <span class="k">class</span> LocationsManager  
+{
+    <span class="k">readonly</span> ILocationRepository _locationRepository;
+    <span class="k">readonly</span> IStateValidator _stateValidator;
+
+    <span class="k">public</span> LocationsManager(ILocationRepository r, IStateValidator v)
+    {
+        _locationRepository <span class="o">=</span> r; 
+        _stateValidator <span class="o">=</span> v;
+    }
+
+    <span class="k">public</span> <span class="k">void</span> CreateLocation(<span class="k">string</span> city, <span class="k">string</span> state)
+    {
+        <span class="k">if</span> (!_stateValidator.IsValid(state)) 
+            <span class="k">throw</span> <span class="k">new</span> ArgumentException(<span class="s">"Not a valid State"</span>);
+        _locationRepository.Insert(city, state);
+    }
+}
+</code></pre></td></tr></table>
+
+<aside class="notes">
+Constructor Injection DI version<br/>
+multiple strategy patterns<br/>
+</aside>
+
+</section>
+
+<section author="Reid Evans" description="A Developer's journey from OO to FP" theme="Simple" title="A Developer's journey from OO to FP" transition="Fade">
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">public</span> <span class="k">interface</span> ILocationRepository
+{
+    <span class="k">void</span> Insert(<span class="k">string</span> city, <span class="k">string</span> state);
+}
+
+<span class="k">public</span> <span class="k">class</span> LocationRepository <span class="o">:</span> ILocationRepository
+{
+    <span class="k">public</span> <span class="k">void</span> Insert(<span class="k">string</span> city, <span class="k">string</span> state)
+    {
+        <span class="k">using</span> (<span class="k">var</span> con <span class="o">=</span> <span class="k">new</span> SqlConnection(Global.ConnectionString))
+        <span class="k">using</span> (<span class="k">var</span> command <span class="o">=</span> con.CreateCommand()) {
+            command.CommandText <span class="o">=</span> 
+                <span class="s">@"Insert into Locations ([State], City)
+                  Values(@State, @City)"</span>;
+
+            command.Parameters.AddWithValue(<span class="s">"State"</span>, state);
+            command.Parameters.AddWithValue(<span class="s">"City"</span>, city);  
+
+            con.Open();
+            command.ExecuteNonQuery();
+        }
+    }
+}   
+</code></pre></td></tr></table>
+
+</section>
+
+<section author="Reid Evans" description="A Developer's journey from OO to FP" theme="Simple" title="A Developer's journey from OO to FP" transition="Fade">
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">public</span> <span class="k">interface</span> IStateValidator
+{
+    <span class="k">bool</span> IsValid(<span class="k">string</span> state);
+}
+
+<span class="k">public</span> <span class="k">class</span> StateValidator <span class="o">:</span> IStateValidator
+{
+    <span class="k">static</span> <span class="k">readonly</span> List&lt;<span class="k">string</span>&gt; ValidStates <span class="o">=</span> <span class="k">new</span> List&lt;<span class="k">string</span>&gt;
+    {
+        <span class="s">"AL"</span>, <span class="s">"AK"</span>, <span class="s">"AZ"</span> <span class="c">//etc..</span>
+    };
+
+    <span class="k">public</span> <span class="k">bool</span> IsValid(<span class="k">string</span> state)
+    {
+        <span class="k">return</span> ValidStates.Contains(state);
+    }
+}
+</code></pre></td></tr></table>
+
+<aside class="notes">
+we also need these interfaces and at least 1 implementation<br/>
+then we need some way of composing all of this<br/>
+</aside>
+
+</section>
+
+<section author="Reid Evans" description="A Developer's journey from OO to FP" theme="Simple" title="A Developer's journey from OO to FP" transition="Fade">
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+<span class="l">9: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">public</span> <span class="k">class</span> ServiceModule <span class="o">:</span> NinjectModule
+{
+    <span class="k">public</span> <span class="k">override</span> <span class="k">void</span> Load()
+    {
+        Bind&lt;ILocationRepository&gt;().To&lt;LocationRepository&gt;();
+
+        Bind&lt;IStateValidator&gt;().To&lt;StateValidator&gt;();
+    }
+}
+</code></pre></td></tr></table>
+
+</section>
+
+<section author="Reid Evans" description="A Developer's journey from OO to FP" theme="Simple" title="A Developer's journey from OO to FP" transition="Fade">
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">public</span> <span class="k">class</span> LocationsManager  
+{
+    <span class="k">readonly</span> ILocationRepository _locationRepository;
+    <span class="k">readonly</span> IStateValidator _stateValidator;
+
+    <span class="k">public</span> LocationsManager(ILocationRepository r, IStateValidator v)
+    {
+        _locationRepository <span class="o">=</span> r; 
+        _stateValidator <span class="o">=</span> v;
+    }
+
+    <span class="k">public</span> <span class="k">void</span> CreateLocation(<span class="k">string</span> city, <span class="k">string</span> state)
+    {
+        <span class="k">if</span> (!_stateValidator.IsValid(state)) 
+            <span class="k">throw</span> <span class="k">new</span> ArgumentException(<span class="s">"Not a valid State"</span>);
+        _locationRepository.Insert(city, state);
+    }
+}
+</code></pre></td></tr></table>
+
+<aside class="notes">
+now we adhere to SOLID principals<br/>
+we can test / mock / stub<br/>
+BUT<br/>
+go to definition now takes us to the interface<br/>
+have 3x lines of code and do the same work<br/>
+</aside>
+
+</section>
+
+</section>
+
+<section >
+
+<p>Code Complete by Steve McConnell</p>
+
+<blockquote>
+  <p><strong>Industry Average</strong>: about 15 - 50 errors per 1000 lines of delivered code.</p>
+</blockquote>
+
+<br>
+
+<blockquote>
+  <p><strong>Microsoft Applications</strong>: about 10 - 20 defects per 1000 lines of code during in-house testing</p>
+</blockquote>
+
+</section>
+
+<section >
+
+<section data-background="#F0AD4E">
+Can we stay SOLID without code bloat?
+</section>
+
+<aside class="notes">
+Mark Seeman's Look No Mocks - Test Induced Damage<br/>
+</aside>
+
+</section>
+
+<section >
+
+<section data-background="#5bc0de">
+If you have a class with two methods and one of them is the constructor you have a function
+
+<p><strong>@JackDied</strong>
+</section></p>
+
+</section>
+
+<section >
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">public</span> <span class="k">class</span> LocationsManager  
+{
+    <span class="k">readonly</span> ILocationRepository _locationRepository;
+    <span class="k">readonly</span> IStateValidator _stateValidator;
+
+    <span class="k">public</span> LocationsManager(ILocationRepository r, IStateValidator v)
+    {
+        _locationRepository <span class="o">=</span> r; 
+        _stateValidator <span class="o">=</span> v;
+    }
+
+    <span class="k">public</span> <span class="k">void</span> CreateLocation(<span class="k">string</span> city, <span class="k">string</span> state)
+    {
+        <span class="k">if</span> (!_stateValidator.IsValid(state)) 
+            <span class="k">throw</span> <span class="k">new</span> ArgumentException(<span class="s">"Not a valid State"</span>);
+        _locationRepository.Insert(city, state);
+    }
+}
+</code></pre></td></tr></table>
+
+<aside class="notes">
+low signal to noise ratio<br/>
+important parts are 14-16, rest is plumbing<br/>
+</aside>
+
+</section>
+
+<section >
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="f">createLocation</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="f">insert</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="f">isValid</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="i">city</span> <span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="i">state</span> <span class="o">=</span>
+    <span class="k">if</span> <span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="i">state</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs3', 7)" onmouseover="showTip(event, 'fs3', 7)" class="f">isValid</span>
+    <span class="k">then</span> <span onmouseout="hideTip(event, 'fs2', 8)" onmouseover="showTip(event, 'fs2', 8)" class="f">insert</span> <span onmouseout="hideTip(event, 'fs4', 9)" onmouseover="showTip(event, 'fs4', 9)" class="i">city</span> <span onmouseout="hideTip(event, 'fs5', 10)" onmouseover="showTip(event, 'fs5', 10)" class="i">state</span>
+    <span class="k">else</span> <span onmouseout="hideTip(event, 'fs6', 11)" onmouseover="showTip(event, 'fs6', 11)" class="f">raise</span> (<span onmouseout="hideTip(event, 'fs7', 12)" onmouseover="showTip(event, 'fs7', 12)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 13)" onmouseover="showTip(event, 'fs8', 13)" class="t">ArgumentException</span>(<span class="s">&quot;Not a valid State&quot;</span>))
+</code></pre></td>
+</tr>
+</table>
+
+<aside class="notes">
+createLocation function that accepts 4 args<br/>
+closures are the poor man's objects :)<br/>
+throwing an error isn't very functional.  We'll revisit<br/>
+</aside>
+
+</section>
+
+<section >
+
+<section data-background="#F0AD4E">
+But then how do I use Dependency Injection and IOC containers?
+</section>
+
+</section>
+
+<section >
+
+<p>Partial Application</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs9', 14)" onmouseover="showTip(event, 'fs9', 14)" class="f">add</span> <span onmouseout="hideTip(event, 'fs10', 15)" onmouseover="showTip(event, 'fs10', 15)" class="i">a</span> <span onmouseout="hideTip(event, 'fs11', 16)" onmouseover="showTip(event, 'fs11', 16)" class="i">b</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 17)" onmouseover="showTip(event, 'fs10', 17)" class="i">a</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs11', 18)" onmouseover="showTip(event, 'fs11', 18)" class="i">b</span>
+<span onmouseout="hideTip(event, 'fs9', 19)" onmouseover="showTip(event, 'fs9', 19)" class="f">add</span> <span class="n">5</span> <span class="n">2</span> 
+<span class="c">// 7</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs12', 20)" onmouseover="showTip(event, 'fs12', 20)" class="f">addFive</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 21)" onmouseover="showTip(event, 'fs9', 21)" class="f">add</span> <span class="n">5</span>
+<span onmouseout="hideTip(event, 'fs12', 22)" onmouseover="showTip(event, 'fs12', 22)" class="f">addFive</span> <span class="n">2</span>
+<span class="c">// 7</span>
+</code></pre></td>
+</tr>
+</table>
+
+<aside class="notes">
+passing one arg to a function that takes 2 args <br/>
+returns a new function that takes 1 arg<br/>
+</aside>
+
+</section>
+
+<section >
+
+<section data-background="#5bc0de">
+
+<p>In functional languages, all functions are interfaces</p>
+
+<aside class="notes">
+any other function with the same signature can be substituted<br/>
+</aside>
+</section>
+
+</section>
+
+<section >
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">interface</span> ICalculator { <span class="k">int</span> Calculate(<span class="k">int</span> input); }
+
+<span class="k">class</span> AddingCalculator: ICalculator
+{
+   <span class="k">public</span> <span class="k">int</span> Calculate(<span class="k">int</span> input) { <span class="k">return</span> input <span class="o">+</span> 1; }
+}
+
+<span class="k">class</span> LoggingCalculator: ICalculator
+{
+   ICalculator _innerCalculator;
+   LoggingCalculator(ICalculator innerCalculator)
+   {
+      _innerCalculator <span class="o">=</span> innerCalculator;
+   }
+
+   <span class="k">public</span> <span class="k">int</span> Calculate(<span class="k">int</span> input) 
+   { 
+      Console.WriteLine(<span class="s">"input is {0}"</span>, input);
+      <span class="k">var</span> result  <span class="o">=</span> _innerCalculator.Calculate(input);
+      Console.WriteLine(<span class="s">"result is {0}"</span>, result);
+      <span class="k">return</span> result; 
+   }
+}
+</code></pre></td></tr></table>
+
+<aside class="notes">
+Calculator with a strategy pattern and a decorator<br/>
+</aside>
+
+</section>
+
+<section >
+
+<p>Equivalent* JavaScript</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="js"><span class="k">var</span> addingCalculator <span class="o">=</span> <span class="k">function</span>(input) { <span class="k">return</span> input <span class="o">+</span> 1 }
+
+<span class="k">var</span> log <span class="o">=</span> <span class="k">function</span>(func, input) {
+    console.log(input);
+    <span class="k">var</span> result <span class="o">=</span> func(input);
+    console.log(result);
+    <span class="k">return</span> result;
+}
+</code></pre></td></tr></table>
+
+<aside class="notes">
+no interface defined, no private ICalculator to manage<br/>
+no IOC container needed to manage dependencies<br/>
+passing functions rather than objects<br/>
+* => the log function works for any function<br/>
+</aside>
+
+</section>
+
+<section >
+
+<p>Statically checked types in C#</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">public</span> <span class="k">static</span> TResult Log&lt;T, TResult&gt;(Func&lt;T, TResult&gt; func, T input)
+{
+    Console.WriteLine(<span class="s">"input is "</span> <span class="o">+</span> input.ToString());
+    <span class="k">var</span> result <span class="o">=</span> func(input);
+    Console.WriteLine(<span class="s">"result is "</span> <span class="o">+</span> result.ToString());
+    <span class="k">return</span> result;
+}
+</code></pre></td></tr></table>
+
+<p>The same code in F#</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs13', 23)" onmouseover="showTip(event, 'fs13', 23)" class="f">log</span> <span onmouseout="hideTip(event, 'fs14', 24)" onmouseover="showTip(event, 'fs14', 24)" class="f">func</span> <span onmouseout="hideTip(event, 'fs15', 25)" onmouseover="showTip(event, 'fs15', 25)" class="i">input</span> <span class="o">=</span> 
+    <span onmouseout="hideTip(event, 'fs16', 26)" onmouseover="showTip(event, 'fs16', 26)" class="f">printfn</span> <span class="s">&quot;input is </span><span class="pf">%A</span><span class="s">&quot;</span> <span onmouseout="hideTip(event, 'fs15', 27)" onmouseover="showTip(event, 'fs15', 27)" class="i">input</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs17', 28)" onmouseover="showTip(event, 'fs17', 28)" class="i">result</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs14', 29)" onmouseover="showTip(event, 'fs14', 29)" class="f">func</span> <span onmouseout="hideTip(event, 'fs15', 30)" onmouseover="showTip(event, 'fs15', 30)" class="i">input</span>
+    <span onmouseout="hideTip(event, 'fs16', 31)" onmouseover="showTip(event, 'fs16', 31)" class="f">printfn</span> <span class="s">&quot;result is </span><span class="pf">%A</span><span class="s">&quot;</span> <span onmouseout="hideTip(event, 'fs17', 32)" onmouseover="showTip(event, 'fs17', 32)" class="i">result</span>
+    <span onmouseout="hideTip(event, 'fs17', 33)" onmouseover="showTip(event, 'fs17', 33)" class="i">result</span>
+</code></pre></td>
+</tr>
+</table>
+
+<aside class="notes">
+and the knock on functional languages is that they have all these crazy symbols<br/>
+now statically checked<br/>
+</aside>
+
+</section>
+
+<section >
+
+<section data-background="#5bc0de">
+Statically type check your data access
+</section>
+
+</section>
+
+<section >
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">type</span> <span onmouseout="hideTip(event, 'fs18', 34)" onmouseover="showTip(event, 'fs18', 34)" class="t">LocationInsert</span> <span class="o">=</span> 
+    <span class="i">SqlCommandProvider</span><span class="o">&lt;</span>
+        <span class="s">&quot;INSERT INTO Locations(State, City, [Date])</span>
+<span class="s">        VALUES (@State, @City, @Date)&quot;</span>, <span class="s">&quot;connectionString&quot;</span><span class="o">&gt;</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs19', 35)" onmouseover="showTip(event, 'fs19', 35)" class="f">insertLocation</span> <span onmouseout="hideTip(event, 'fs4', 36)" onmouseover="showTip(event, 'fs4', 36)" class="i">city</span> <span onmouseout="hideTip(event, 'fs5', 37)" onmouseover="showTip(event, 'fs5', 37)" class="i">state</span> <span onmouseout="hideTip(event, 'fs20', 38)" onmouseover="showTip(event, 'fs20', 38)" class="i">date</span> <span class="o">=</span>
+    <span class="k">use</span> <span onmouseout="hideTip(event, 'fs21', 39)" onmouseover="showTip(event, 'fs21', 39)" class="i">command</span> <span class="o">=</span> <span class="k">new</span> <span onmouseout="hideTip(event, 'fs18', 40)" onmouseover="showTip(event, 'fs18', 40)" class="t">LocationInsert</span>()
+    <span onmouseout="hideTip(event, 'fs21', 41)" onmouseover="showTip(event, 'fs21', 41)" class="i">command</span><span class="o">.</span><span class="i">Execute</span>(<span onmouseout="hideTip(event, 'fs5', 42)" onmouseover="showTip(event, 'fs5', 42)" class="i">state</span>, <span onmouseout="hideTip(event, 'fs4', 43)" onmouseover="showTip(event, 'fs4', 43)" class="i">city</span>, <span onmouseout="hideTip(event, 'fs20', 44)" onmouseover="showTip(event, 'fs20', 44)" class="i">date</span>)
+</code></pre></td>
+</tr>
+</table>
+
+<aside class="notes">
+sql is checked at design time against actual db<br/>
+Execute forces correct arguments<br/>
+</aside>
+
+</section>
+
+<section >
+
+<p>No more nulls</p>
+
+</section>
+
+<section >
+
+<p>What is the result type of this function?</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="js"><span class="k">function</span> divide(a, b) {
+    <span class="k">return</span> a <span class="o">/</span> b;
+}
+</code></pre></td></tr></table>
+
+<aside class="notes">
+numeric for most cases,  except 0.  <br/>
+throw an exception?<br/>
+return null?<br/>
+</aside>
+
+</section>
+
+<section >
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">type</span> <span onmouseout="hideTip(event, 'fs22', 45)" onmouseover="showTip(event, 'fs22', 45)" class="t">Option</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span><span class="o">&gt;</span> <span class="o">=</span>
+    | <span onmouseout="hideTip(event, 'fs23', 46)" onmouseover="showTip(event, 'fs23', 46)" class="p">Some</span> <span class="k">of</span> <span class="o">&#39;</span><span class="i">T</span>
+    | <span onmouseout="hideTip(event, 'fs24', 47)" onmouseover="showTip(event, 'fs24', 47)" class="p">None</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs25', 48)" onmouseover="showTip(event, 'fs25', 48)" class="f">divideBy</span> <span onmouseout="hideTip(event, 'fs26', 49)" onmouseover="showTip(event, 'fs26', 49)" class="i">bottom</span> <span onmouseout="hideTip(event, 'fs27', 50)" onmouseover="showTip(event, 'fs27', 50)" class="i">top</span> <span class="o">=</span>
+    <span class="k">if</span> <span onmouseout="hideTip(event, 'fs26', 51)" onmouseover="showTip(event, 'fs26', 51)" class="i">bottom</span> <span class="o">=</span> <span class="n">0</span>
+    <span class="k">then</span> <span onmouseout="hideTip(event, 'fs24', 52)" onmouseover="showTip(event, 'fs24', 52)" class="p">None</span>
+    <span class="k">else</span> <span onmouseout="hideTip(event, 'fs23', 53)" onmouseover="showTip(event, 'fs23', 53)" class="p">Some</span>(<span onmouseout="hideTip(event, 'fs27', 54)" onmouseover="showTip(event, 'fs27', 54)" class="i">top</span><span class="o">/</span><span onmouseout="hideTip(event, 'fs26', 55)" onmouseover="showTip(event, 'fs26', 55)" class="i">bottom</span>)
+
+<span class="n">8</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs25', 56)" onmouseover="showTip(event, 'fs25', 56)" class="f">divideBy</span> <span class="n">4</span>;;
+<span class="c">//int option = Some 2</span>
+
+<span class="n">8</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs25', 57)" onmouseover="showTip(event, 'fs25', 57)" class="f">divideBy</span> <span class="n">0</span>;;
+<span class="c">//int option = None</span>
+</code></pre></td>
+</tr>
+</table>
+
+<aside class="notes">
+typical functional approach<br/>
+treating nullable explicitly and as the exception<br/>
+</aside>
+
+</section>
+
+<section >
+
+<section data-background="#5bc0de">
+Staying focused on the happy path
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<p>Happy Path in C#</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">public</span> <span class="k">string</span> InsertLocation(Location location)
+{
+    validateRequest(location);
+    db.updateDbFromRequest(location);
+    email.EmailNearbyCustomers(location);
+    <span class="k">return</span> <span class="s">"Success"</span>;
+}
+</code></pre></td></tr></table>
+
+<aside class="notes">
+what if the request isn't valid?<br/>
+</aside>
+
+</section>
+
+<section author="Reid Evans" description="A Developer's journey from OO to FP" theme="Simple" title="A Developer's journey from OO to FP" transition="Fade">
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">public</span> <span class="k">string</span> InsertLocation(Location location)
+{
+    <span class="k">if</span> (!validateRequest(location))
+        <span class="k">throw</span> <span class="k">new</span> ArgumentException(<span class="s">"Location not valid"</span>);
+    db.updateDbFromRequest(location);
+    email.EmailNearbyCustomers(location);
+    <span class="k">return</span> <span class="s">"Success"</span>;
+}
+</code></pre></td></tr></table>
+
+<aside class="notes">
+what if the db throws an error?<br/>
+</aside>
+
+</section>
+
+<section author="Reid Evans" description="A Developer's journey from OO to FP" theme="Simple" title="A Developer's journey from OO to FP" transition="Fade">
+
+<p>Unhappy Path in C#</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">public</span> <span class="k">string</span> InsertLocation(Location location)
+{
+    <span class="k">if</span> (!validateRequest(location))
+        <span class="k">return</span> <span class="s">"Failure"</span>;
+    <span class="k">try</span>
+    {
+        db.updateDbFromRequest(location);
+    } 
+    <span class="k">catch</span> (Exception e)
+    {
+        Logger.Log(e);
+        <span class="k">return</span> <span class="s">"Failure"</span>;
+    }   
+    email.EmailNearbyCustomers(location);
+    <span class="k">return</span> <span class="s">"Success"</span>;
+}
+</code></pre></td></tr></table>
+
+<aside class="notes">
+multiple returns<br/>
+</aside>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<p>Happy Path in F#</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs28', 59)" onmouseover="showTip(event, 'fs28', 59)" class="i">insertLocation</span> <span class="o">=</span> 
+    <span class="i">validateRequest</span>
+    <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="i">updateDbFromRequest</span>
+    <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="i">emailNearbyCustomers</span>
+</code></pre></td>
+</tr>
+</table>
+
+</section>
+
+<section author="Reid Evans" description="A Developer's journey from OO to FP" theme="Simple" title="A Developer's journey from OO to FP" transition="Fade">
+
+<p>Unhappy Path in F#</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs28', 59)" onmouseover="showTip(event, 'fs28', 59)" class="i">insertLocation</span> <span class="o">=</span> 
+    <span class="i">validateRequest</span>
+    <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="i">updateDbFromRequest</span>
+    <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="i">emailNearbyCustomers</span>
+</code></pre></td>
+</tr>
+</table>
+
+</section>
+
+</section>
+
+<section >
+
+<section data-background="#F0AD4E">
+How is that possible?
+</section>  
+
+</section>
+
+<section >
+
+<section >
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="js">$.when([1,2,3])
+.then(<span class="k">function</span> (data) {
+    console.log(data)
+});
+<span class="c">// [1,2,3]</span>
+</code></pre></td></tr></table>
+
+<aside class="notes">
+can replace when with ajax<br/>
+</aside>
+
+</section>
+
+<section author="Reid Evans" description="A Developer's journey from OO to FP" theme="Simple" title="A Developer's journey from OO to FP" transition="Fade">
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+<span class="l">9: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">function</span> <span onmouseout="hideTip(event, 'fs13', 60)" onmouseover="showTip(event, 'fs13', 60)" class="i">log</span> (<span class="i">x</span>) { <span class="i">console</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs13', 61)" onmouseover="showTip(event, 'fs13', 61)" class="i">log</span>(<span class="i">x</span>) }
+<span class="k">function</span> <span class="i">addOne</span> (<span class="i">x</span>) { <span class="k">return</span> <span class="i">x</span> <span class="o">+</span> <span class="n">1</span> }
+
+[<span class="i">lang</span><span class="o">=</span><span class="i">js</span>]
+<span class="o">$.</span><span class="k">when</span>([<span class="n">1</span>,<span class="n">2</span>,<span class="n">3</span>])
+<span class="o">.</span><span class="k">then</span>(<span class="k">function</span> (<span class="i">data</span>) {
+    <span class="k">return</span> <span class="i">data</span><span class="o">.</span><span class="i">map</span>(<span class="i">addOne</span>)
+})<span class="o">.</span><span class="k">then</span>(<span onmouseout="hideTip(event, 'fs13', 62)" onmouseover="showTip(event, 'fs13', 62)" class="i">log</span>);   
+<span class="c">// [2,3,4]</span>
+</code></pre></td>
+</tr>
+</table>
+
+<aside class="notes">
+our functions aren't written to know about promises<br/>
+the then function does magic to allow us to work with the underlying structure<br/>
+</aside>
+
+</section>
+
+<section author="Reid Evans" description="A Developer's journey from OO to FP" theme="Simple" title="A Developer's journey from OO to FP" transition="Fade">
+
+<p>C# .NET 4.5</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="cs"><span class="k">async</span> Task&lt;<span class="k">int</span>&gt; AddSomeNumbers()
+{
+    <span class="k">var</span> one <span class="o">=</span> await Task.FromResult(1);
+    <span class="k">var</span> two <span class="o">=</span> await Task.FromResult(2);
+    <span class="k">return</span> one <span class="o">+</span> two;
+}
+</code></pre></td></tr></table>
+
+<p>Javascript ES7</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="js">async <span class="k">function</span> getTweetContent() {
+    let tweet <span class="o">=</span> await getJSON(<span class="s">'http://twitter.com/mytweet.json'</span>);
+    <span class="k">return</span> tweet.Content;
+}
+</code></pre></td></tr></table>
+
+</section>
+
+</section>
+
+<section >
+
+<section data-background="#5bc0de">
+These are all examples of Monads
+</section>
+
+</section>
+
+<section >
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">type</span> <span onmouseout="hideTip(event, 'fs22', 63)" onmouseover="showTip(event, 'fs22', 63)" class="i">Option</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span><span class="o">&gt;</span> <span class="o">=</span>
+    | <span onmouseout="hideTip(event, 'fs23', 64)" onmouseover="showTip(event, 'fs23', 64)" class="i">Some</span> <span class="k">of</span> <span class="o">&#39;</span><span class="i">T</span>
+    | <span onmouseout="hideTip(event, 'fs24', 65)" onmouseover="showTip(event, 'fs24', 65)" class="i">None</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs25', 66)" onmouseover="showTip(event, 'fs25', 66)" class="i">divideBy</span> <span class="i">bottom</span> <span class="i">top</span> <span class="o">=</span>
+    <span class="k">if</span> <span class="i">bottom</span> <span class="o">=</span> <span class="n">0</span>
+    <span class="k">then</span> <span onmouseout="hideTip(event, 'fs24', 67)" onmouseover="showTip(event, 'fs24', 67)" class="i">None</span>
+    <span class="k">else</span> <span onmouseout="hideTip(event, 'fs23', 68)" onmouseover="showTip(event, 'fs23', 68)" class="i">Some</span>(<span class="i">top</span><span class="o">/</span><span class="i">bottom</span>)
+
+<span class="n">8</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs25', 69)" onmouseover="showTip(event, 'fs25', 69)" class="i">divideBy</span> <span class="n">4</span>
+<span class="c">//int option = Some 2</span>
+
+<span class="n">8</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs25', 70)" onmouseover="showTip(event, 'fs25', 70)" class="i">divideBy</span> <span class="n">0</span>
+<span class="c">//int option = None</span>
+</code></pre></td>
+</tr>
+</table>
+
+<aside class="notes">
+How do we chain them?<br/>
+divideBy takes ints and returns an int option<br/>
+</aside>
+
+</section>
+
+<section >
+
+<p>Chaining Option<'T></p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">divideByWorkflow</span> <span class="i">init</span> <span class="i">x</span> <span class="i">y</span> <span class="o">=</span> <span class="i">maybe</span> {
+    <span class="k">let!</span> <span class="i">a</span> <span class="o">=</span> <span class="i">init</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs25', 77)" onmouseover="showTip(event, 'fs25', 77)" class="i">divideBy</span> <span class="i">x</span>
+    <span class="k">let!</span> <span class="i">b</span> <span class="o">=</span> <span class="i">a</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs25', 78)" onmouseover="showTip(event, 'fs25', 78)" class="i">divideBy</span> <span class="i">y</span>
+    <span class="k">return</span> <span class="i">b</span>
+    }
+
+<span class="i">divideByWorkflow</span> <span class="n">12</span> <span class="n">3</span> <span class="n">2</span>
+<span class="c">//int option = Some 2</span>
+
+<span class="i">divideByWorkflow</span> <span class="n">12</span> <span class="n">0</span> <span class="n">1</span>
+<span class="c">//int option = None</span>
+</code></pre></td>
+</tr>
+</table>
+
+<aside class="notes">
+a and b are now ints.  <br/>
+if either return none the whole function returns none<br/>
+</aside>
+
+</section>
+
+<section >
+
+<p>Defining Maybe</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">type</span> <span class="i">MaybeBuilder</span>() <span class="o">=</span>
+    <span class="k">member</span> <span class="i">this</span><span class="o">.</span><span class="i">Return</span>(<span class="i">x</span>) <span class="o">=</span> <span onmouseout="hideTip(event, 'fs23', 73)" onmouseover="showTip(event, 'fs23', 73)" class="i">Some</span> <span class="i">x</span>
+    <span class="k">member</span> <span class="i">this</span><span class="o">.</span><span class="i">Bind</span>(<span class="i">x</span>, <span class="i">f</span>) <span class="o">=</span> 
+        <span class="k">match</span> <span class="i">x</span> <span class="k">with</span>
+        | <span onmouseout="hideTip(event, 'fs24', 74)" onmouseover="showTip(event, 'fs24', 74)" class="i">None</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs24', 75)" onmouseover="showTip(event, 'fs24', 75)" class="i">None</span>
+        | <span onmouseout="hideTip(event, 'fs23', 76)" onmouseover="showTip(event, 'fs23', 76)" class="i">Some</span> <span class="i">a</span> <span class="k">-&gt;</span> <span class="i">f</span> <span class="i">a</span>
+
+<span class="k">let</span> <span class="i">maybe</span> <span class="o">=</span> <span class="k">new</span> <span class="i">MaybeBuilder</span>()
+</code></pre></td>
+</tr>
+</table>
+
+<aside class="notes">
+Return "wraps" a value in the monad<br/>
+Bind takes a non wrapped value 'a and function from 'a to M<'b> and returns M<'b><br/>
+</aside>
+
+</section>
+
+<section >
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">divideByWorkflow</span> <span class="i">init</span> <span class="i">x</span> <span class="i">y</span> <span class="o">=</span> <span class="i">maybe</span> {
+    <span class="k">let!</span> <span class="i">a</span> <span class="o">=</span> <span class="i">init</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs25', 77)" onmouseover="showTip(event, 'fs25', 77)" class="i">divideBy</span> <span class="i">x</span>
+    <span class="k">let!</span> <span class="i">b</span> <span class="o">=</span> <span class="i">a</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs25', 78)" onmouseover="showTip(event, 'fs25', 78)" class="i">divideBy</span> <span class="i">y</span>
+    <span class="k">return</span> <span class="i">b</span>
+    }
+
+<span class="i">divideByWorkflow</span> <span class="n">12</span> <span class="n">3</span> <span class="n">2</span>
+<span class="c">//int option = Some 2</span>
+
+<span class="i">divideByWorkflow</span> <span class="n">12</span> <span class="n">0</span> <span class="n">1</span>
+<span class="c">//int option = None</span>
+</code></pre></td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<section data-background="#F0AD4E">
+Aren't Monads a Haskell thing?
+</section>
+
+</section>
+
+<section >
+
+<p>Monad in F#</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">type</span> <span class="i">MaybeBuilder</span>() <span class="o">=</span>
+    <span class="k">member</span> <span class="i">this</span><span class="o">.</span><span class="i">Return</span>(<span class="i">x</span>) <span class="o">=</span> <span onmouseout="hideTip(event, 'fs23', 79)" onmouseover="showTip(event, 'fs23', 79)" class="i">Some</span> <span class="i">x</span>
+    <span class="k">member</span> <span class="i">this</span><span class="o">.</span><span class="i">Bind</span>(<span class="i">x</span>, <span class="i">f</span>) <span class="o">=</span> 
+        <span class="k">match</span> <span class="i">x</span> <span class="k">with</span>
+        | <span onmouseout="hideTip(event, 'fs24', 80)" onmouseover="showTip(event, 'fs24', 80)" class="i">None</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs24', 81)" onmouseover="showTip(event, 'fs24', 81)" class="i">None</span>
+        | <span onmouseout="hideTip(event, 'fs23', 82)" onmouseover="showTip(event, 'fs23', 82)" class="i">Some</span> <span class="i">a</span> <span class="k">-&gt;</span> <span class="i">f</span> <span class="i">a</span>
+</code></pre></td>
+</tr>
+</table>
+
+<p>Monad in Haskell</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="haskell"><span class="k">class</span> Monad m <span class="k">where</span> {
+  (<span class="prep">&gt;</span><span class="prep">&gt;</span><span class="prep">=</span>)  <span class="prep">::</span> m a <span class="prep">-</span><span class="prep">&gt;</span> (a <span class="prep">-</span><span class="prep">&gt;</span> m b) <span class="prep">-</span><span class="prep">&gt;</span> m b
+  return <span class="prep">::</span> a  <span class="prep">-</span><span class="prep">&gt;</span> m a
+}   
+</code></pre></td></tr></table>
+
+<aside class="notes">
+the Fsharp example is for a specific monad<br/>
+the Haskell version is generic and accepts any monad<br/>
+not generic type classes like Haskell<br/>
+</aside>
+
+</section>
+
+<section >
+
+<p>Equivalent Haskell Monad in F#</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">type</span> <span class="i">Monad</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">M</span><span class="o">&gt;</span> <span class="o">=</span>
+    <span class="k">abstract</span> <span class="k">member</span> <span class="i">bind</span> <span class="o">:</span> <span class="o">&#39;</span><span class="i">M</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">a</span><span class="o">&gt;</span> <span class="k">-&gt;</span> (<span class="o">&#39;</span><span class="i">a</span> <span class="k">-&gt;</span> <span class="o">&#39;</span><span class="i">M</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">b</span><span class="o">&gt;</span>) <span class="k">-&gt;</span> <span class="o">&#39;</span><span class="i">M</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">b</span><span class="o">&gt;</span>
+    <span class="k">abstract</span> <span class="k">member</span> <span class="i">``return``</span> <span class="o">:</span> <span class="o">&#39;</span><span class="i">a</span> <span class="k">-&gt;</span> <span class="o">&#39;</span><span class="i">M</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">a</span><span class="o">&gt;</span>
+
+<span class="c">//error FS0712: Type parameter cannot be used as type constructor</span>
+</code></pre></td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<section data-background="#F0AD4E">
+How do I choose a functional language?
+</section>
+
+</section>
+
+<section >
+
+<ul>
+<li><strong>Haskell</strong> - Pure language</li>
+<li><strong>Clojure</strong> - A Lisp on JVM</li>
+<li><strong>F#</strong> - Functional first on CLR / .NET</li>
+<li><strong>Erlang / Elixir</strong> - Massive scalability</li>
+</ul>
+
+<aside class="notes">
+all languages have pros and cons<br/>
+need 'web scale'? look at Erlang and Elixir<br/>
+already on .Net? look at F# though Clojure can target clr<br/>
+already on Java? Clojure and Scala<br/>
+want a pure language? try Haskell<br/>
+</aside>
+
+</section>
+
+<section >
+
+<section >
+
+<h2>Anecdotal Results of switching to FP</h2>
+
+<ul>
+<li>Social dealer management system for Freightliner</li>
+<li>5 months development</li>
+<li>3,582 lines of code</li>
+<li>2 bugs not caught at compile time</li>
+</ul>
+
+</section>
+
+<section author="Reid Evans" description="A Developer's journey from OO to FP" theme="Simple" title="A Developer's journey from OO to FP" transition="Fade">
+
+<h3>Bug #1</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">type</span> <span class="i">GetChildObjects</span> <span class="o">=</span> 
+    <span class="i">SqlCommandProvider</span><span class="o">&lt;</span>
+        <span class="s">&quot;Select * FROM ChildTable where id = @id&quot;</span>, <span class="s">&quot;connectionString&quot;</span><span class="o">&gt;</span>
+
+<span class="k">type</span> <span class="i">GetChildObjects&#39;</span> <span class="o">=</span> 
+    <span class="i">SqlCommandProvider</span><span class="o">&lt;</span>
+        <span class="s">&quot;Select * FROM ChildTable where parentId = @id&quot;</span>, <span class="s">&quot;connectionString&quot;</span><span class="o">&gt;</span>    
+</code></pre></td>
+</tr>
+</table>
+
+<aside class="notes">
+both require an int, no way for compiler to know I goofed<br/>
+</aside>
+
+</section>
+
+<section author="Reid Evans" description="A Developer's journey from OO to FP" theme="Simple" title="A Developer's journey from OO to FP" transition="Fade">
+
+<h3>Bug #2</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">type</span> <span class="i">GetChildObjects</span> <span class="o">=</span> 
+    <span class="i">SqlCommandProvider</span><span class="o">&lt;</span>
+        <span class="s">&quot;Select * FROM ChildTable where parentId = @id&quot;</span>, <span class="s">&quot;connectionString&quot;</span><span class="o">&gt;</span>
+
+<span class="k">let</span> <span class="i">getChildObjects</span> <span class="i">parentId</span> <span class="o">=</span> 
+    <span class="k">use</span> <span onmouseout="hideTip(event, 'fs29', 83)" onmouseover="showTip(event, 'fs29', 83)" class="i">query</span> <span class="o">=</span> <span class="k">new</span> <span class="i">GetChildObjects</span>()
+    <span onmouseout="hideTip(event, 'fs29', 84)" onmouseover="showTip(event, 'fs29', 84)" class="i">query</span><span class="o">.</span><span class="i">Execute</span>(<span class="i">parentId</span>)
+    <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs30', 85)" onmouseover="showTip(event, 'fs30', 85)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs31', 86)" onmouseover="showTip(event, 'fs31', 86)" class="i">map</span> (<span class="k">fun</span> <span class="i">x</span> <span class="k">-&gt;</span> { <span class="i">Id</span> <span class="o">=</span> <span class="i">x</span><span class="o">.</span><span class="i">Id</span>; <span class="i">Name</span> <span class="o">=</span> <span class="i">x</span><span class="o">.</span><span class="i">Name</span> })
+</code></pre></td>
+</tr>
+</table>
+
+<aside class="notes">
+Too many open commands <br/>
+Seq is lazy evaluated so by returning it the runtime wasn't sure when to dispose of the query<br/>
+</aside>
+
+</section>
+
+</section>
+
+<section >
+
+<section data-background="#5bc0de">
+
+<p>The model you use to view the world shapes the thoughts you are able to think.</p>
+
+<p><strong>@TheBurningMonk</strong>
+</section></p>
+
+<aside class="notes">
+If there were parts of this talk you didnt understand <br/>
+</aside>
+
+</section>
+
+<section >
+
+<h3><a href="http://twitter.com/reidnevans">@ReidNEvans</a></h3>
+
+<p><a href="http://reidevans.tech">http://reidevans.tech</a></p>
+
+<p>Links</p>
+
+<p><a href="http://fsharpforfunandprofit.com">http://fsharpforfunandprofit.com</a></p>
+
+<p>Monads in pictures
+<a href="http://tinyurl.com/MonadsInPictures">http://tinyurl.com/MonadsInPictures</a></p>
+
+<p>Look, No Mocks! Functional TDD with F#
+<a href="http://www.infoq.com/presentations/mock-fsharp-tdd">http://www.infoq.com/presentations/mock-fsharp-tdd</a></p>
+
+<p><a href="http://theburningmonk.com/2015/04/dont-learn-a-syntax-learn-to-change-the-way-you-think/">http://theburningmonk.com/2015/04/dont-learn-a-syntax-learn-to-change-the-way-you-think/</a></p>
+
+</section>
+
+
+
+        </div>
+    </div>
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+    <script>
+        // Add the nohighlight class and data-noescape attribute to code elements that have already been formatted by FSharp.Formatting
+        $('pre.highlighted code').addClass('nohighlight').attr('data-noescape', '');
+
+        // Full list of configuration options available here:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'Fade', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Parallax scrolling
+            // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+            // parallaxBackgroundSize: '2100px 900px',
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: 'lib/js/classList.js', condition: function () { return !document.body.classList; } },
+                { src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: 'plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+                { src: 'plugin/zoom-js/zoom.js', async: true, condition: function () { return !!document.body.classList; } },
+                { src: 'plugin/notes/notes.js', async: true, condition: function () { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+</body>
+</html>
+

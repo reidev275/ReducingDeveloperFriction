@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+<assembly><name>FsReveal</name></assembly>
+<members>
+<member name="M:FsReveal.FsReveal.GetPresentationFromScriptString(System.String,Microsoft.FSharp.Core.FSharpOption{System.String},Microsoft.FSharp.Core.FSharpOption{FSharp.Literate.IFsiEvaluator})">
+<summary>
+ Creates a presentation from an F# Script file specified as string. This also evaluates
+ all F# code snippets in the presentation and embeds the outputs. If you do not specify
+ a custom FSI evaluator, a new default one is created. See `GenerateFromFile` for more info.
+</summary>
+</member>
+<member name="M:FsReveal.FsReveal.GetPresentationFromMarkdown(System.String,Microsoft.FSharp.Core.FSharpOption{System.String},Microsoft.FSharp.Core.FSharpOption{FSharp.Literate.IFsiEvaluator})">
+<summary>
+ Creates a presentation from a Markdown source file specified as string. This also evaluates
+ all F# code snippets in the presentation and embeds the outputs. If you do not specify
+ a custom FSI evaluator, a new default one is created. See `GenerateFromFile` for more info.
+</summary>
+</member>
+<member name="M:FsReveal.FsReveal.GenerateOutputFromScriptFile(System.String,System.String,Microsoft.FSharp.Core.FSharpOption{System.String},Microsoft.FSharp.Core.FSharpOption{FSharp.Literate.IFsiEvaluator})">
+<summary>
+ Processes a presentation specified as an F# Script. This also evaluates all 
+ F# code snippets in the presentation and embeds the outputs. If you do not specify
+ a custom FSI evaluator, a new default one is created. See `GenerateFromFile` for more info.
+</summary>
+</member>
+<member name="M:FsReveal.FsReveal.GenerateOutputFromMarkdownFile(System.String,System.String,Microsoft.FSharp.Core.FSharpOption{System.String},Microsoft.FSharp.Core.FSharpOption{FSharp.Literate.IFsiEvaluator})">
+<summary>
+ Processes a presentation specified as a Markdown. This also evaluates all 
+ F# code snippets in the presentation and embeds the outputs. If you do not specify
+ a custom FSI evaluator, a new default one is created. See `GenerateFromFile` for more info.
+</summary>
+</member>
+<member name="M:FsReveal.FsReveal.GenerateOutput(FsReveal.Presentation,System.String,Microsoft.FSharp.Core.FSharpOption{System.String})">
+<summary>
+ Write the specified presentation to a specified file in the output directory.
+ (if a file name is not specified, the default `index.html` will be used)
+</summary>
+</member>
+<member name="M:FsReveal.FsReveal.GenerateFromFile(System.String,System.String,Microsoft.FSharp.Core.FSharpOption{System.String},Microsoft.FSharp.Core.FSharpOption{FSharp.Literate.IFsiEvaluator})">
+<summary>
+ Processes a presentation specified as an F# Script file or a Markdown document. 
+ (When the file name has extension other than `fsx` or `md`, nothing happens).
+
+ The method evaluates F# code snippets in the presentation and embeds the outputs. You
+ can specify a custom `fsiEvaluator` to add formatting for custom values and handle errors
+ during the valuation.  
+
+ ## Parameters
+ - `fsiEvaluator` - Custom evaluator (you can use this parameter to add custom formatting
+   that turns values into HTML when embedding them into the presentation)
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="M:FsReveal.Formatting.GenerateHTML(System.String,FsReveal.Presentation)">
+<summary>
+ Generates a HTML page from a presentation
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:FsReveal.Formatting">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:FsReveal.FsRevealHelper">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:FsReveal.Markdown">
+
+</member>
+<member name="M:FsReveal.Misc.splitBy``1(``0,Microsoft.FSharp.Collections.FSharpList{``0})">
+<summary>
+ Split a list into chunks using the specified separator
+ This takes a list and returns a list of lists (chunks)
+ that represent individual groups, separated by the given
+ separator &apos;v&apos;
+</summary>
+</member>
+<member name="M:FsReveal.Misc.copyFiles(Microsoft.FSharp.Core.FSharpFunc{System.String,System.Boolean},System.String,System.String)">
+<summary>
+ Copy all files from source to target
+</summary>
+</member>
+<member name="M:FsReveal.Misc.ensureDirectory(System.String)">
+<summary>
+ Ensure that directory exists
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="M:FsReveal.Misc.op_AtAt(System.String,System.String)">
+<summary>
+ Correctly combine two paths
+</summary>
+</member>
+<member name="T:FsReveal.Misc">
+
+</member>
+</members>
+</doc>

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Suave</id>
+    <version>0.29.0</version>
+    <title>Suave</title>
+    <authors>Ademar Gonzalez, Henrik Feldt</authors>
+    <owners>Ademar Gonzalez, Henrik Feldt</owners>
+    <licenseUrl>https://github.com/SuaveIO/Suave/blob/master/COPYING</licenseUrl>
+    <projectUrl>http://suave.io</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Suave is a simple web development F# library providing a lightweight web server and a set of combinators to manipulate route flow and task composition.</description>
+    <releaseNotes>Release Notes:
+
+ * v0.29.0
+ * should not matter anymore
+ * bug fix: trim double quotes
+ * [http] support source maps
+ * remove header - test does not use it
+ * handle expect 100-continue
+ * [http] JS mime type, fixes #262</releaseNotes>
+    <copyright>Ademar Gonzalez, Henrik Feldt</copyright>
+    <language>en-GB</language>
+    <dependencies>
+      <dependency id="FSharp.Core" version="3.1.2.1" />
+      <dependency id="FsPickler" version="1.2.5" />
+    </dependencies>
+  </metadata>
+</package>

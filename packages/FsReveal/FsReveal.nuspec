@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>FsReveal</id>
+    <version>1.0.2</version>
+    <authors>Karlkim Suwanmongkol</authors>
+    <licenseUrl>http://fsprojects.github.io/FsReveal/license.html</licenseUrl>
+    <projectUrl>https://github.com/fsprojects/FsReveal</projectUrl>
+    <iconUrl>http://fsprojects.github.io/FsReveal/img/logo-2.png</iconUrl>
+    <description>FsReveal parses markdown or F# script files and generates reveal.js slides.</description>
+    <releaseNotes>Fix CSS around cde</releaseNotes>
+    <tags>F# markdown reveal.js</tags>
+    <dependencies>
+      <dependency id="FSharp.Formatting" version="2.7.5" />
+    </dependencies>
+  </metadata>
+</package>
