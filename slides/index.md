@@ -9,37 +9,7 @@
 ### A Developer's journey from OO to Functional
 ####[@ReidNEvans](http://twitter.com/reidnevans)
 ####http://reidevans.tech
-
-' - data-state : intro
-' good morning
-' thank you so much for coming today
-' This is A developer’s journey from OO to FP
-
-
-***
-
-![Tombras](images/tombras.jpg)
-###http://www.tombras.com
-
-* Daimler
-* ESPN
-* McDonalds
-* Michelin
-
-' I’m currently a Senior Developer at The Tombras Group
-' Tombras is a 150+ employee, full-service agency with a digital mindset. 
-' We are one of the top 35 independent agencies in north america. 
-' 11 months: ESPN, Regional Bank website, 2 non trivial web apps for Daimler
-
----
-
-###Currently Hiring
-
-* Front end developer
-* Technical Director
-* QA
-
-' currently hiring Front end developer, Technical Director, QA
+####[@FunctionalKnox](http://twitter.com/functionalknox)
 
 ***
 
@@ -48,9 +18,8 @@ Overview
 * OO design patterns
 * SOLID principles
 * Code Bloat
-* Statically type check all the things
 * Staying focused on the happy path
-* Results
+* Anecdotal Results
 
 ***
 
@@ -60,10 +29,6 @@ The model you use to view the world shapes the thoughts you are able to think.
 
 **@TheBurningMonk**
 </section>
-
-' we're going to start from my beginnings 
-' we'll go into OO, discuss Solid principles and IOC containers
-' we'll discuss why functional is a better fit for me
 
 ***
 
@@ -75,9 +40,6 @@ My beginnings in professional development
 		Label1.Caption := 'Hello World';
 	end;
 
-' hello world in Delphi
-' ... which then leads us to complex data stuff in Delphi
-	
 ***
 	[lang=pascal]
 	procedure TForm1.Button1Click(Sender: TObject);
@@ -101,7 +63,6 @@ My beginnings in professional development
 ' in the UI we're opening a db connection to a table 
 ' we're appending, setting some values and saving
 ' 1 layer, very rapid development, very difficult maintenance
-' anyone had any experience with Delphi?  Anders Hejlsberg's work pre msft and C#
 ' so then I hear all this amazing stuff about .net
 	
 ***
@@ -204,15 +165,15 @@ How should all this code fit together?
 Factory 
 
 	[lang=cs]
-	public class Factory
+	public class Bar
 	{
-		public IFoo GetImplementation(MyEnum enum)
+		public IBeverage MakeDrink(Person person)
 		{
-			switch (enum)
+			switch (person)
 			{
-				case MyEnum.Foo : return new Foo();
-				case MyEnum.Bar : return new Bar();
-				default: return null;
+				case Person.TheDude : return new Caucasian();
+				case Person.JackieTreehorn : return new HellOfACaucasian();
+				default: return new WhiteRussian();
 			}
 		}
 	}
@@ -224,35 +185,21 @@ Factory
 Strategy
 
 	[lang=cs]
-	public class LocationsManager  
+	interface IBowler
 	{
-		readonly ILocationRepository _locationRepository;
-		
-		public LocationsManager(ILocationRepository locationRepository)
-		{
-			_locationRepository = locationRepository;
-		}
+		bool Rolls(DateTime date);
+	}
 	
-		public void CreateLocation(string city, string state)
+	class WalterSobchak : IBowler
+	{
+		public bool Rolls(DateTime date)
 		{
-			_locationRepository.Insert(city, state);
+			return !date.IsSabbath;
 		}
 	}
 
 ' here we're dependent upon the abstraction to do work
 	
-***
-	
-Command
-
-	[lang=cs]
-	public interface ICommand
-	{
-		void Execute();
-	}
-	
-' here the whole thing is an abstraction
-		
 ***
 
 <section data-background="#5bc0de">
@@ -271,17 +218,15 @@ How do I know if the code I'm writing is any good?
 
 </section>
 
-' you can write really bad code using really good patterns and vice versa
-
 ***
 
-## Solid principals
+## Solid principles
 
-* Single Responsibility Principal
-* Open Closed Principal
-* Liskov Substitution Principal
-* Interface Segregation Principal 
-* Dependency Inversion Principal
+* Single Responsibility Principle
+* Open Closed Principle
+* Liskov Substitution Principle
+* Interface Segregation Principle
+* Dependency Inversion Principle
 
 ***
 
@@ -428,7 +373,7 @@ Can't I do all of that in Object Oriented code?
 		}
 	}
 
-' now we adhere to SOLID principals
+' now we adhere to SOLID principles
 ' we can test / mock / stub
 ' BUT
 ' go to definition now takes us to the interface
@@ -485,7 +430,7 @@ If you have a class with two methods and one of them is the constructor you have
 ' low signal to noise ratio
 ' important parts are 14-16, rest is plumbing
 
-***
+---
 
 	let createLocation insert isValid city state =
 		if state |> isValid
@@ -499,29 +444,65 @@ If you have a class with two methods and one of them is the constructor you have
 ***
 
 <section data-background="#F0AD4E">
-But then how do I use Dependency Injection and IOC containers?
+### What is Functional Programming?
 </section>
 
 ***
 
-Partial Application
+![DomainCodomain](images/domain-codomain.png)
 
-	let add a b = a + b
-	add 5 2 
-	// 7
+---
+
+## Totality
+
+Every element in the domain must be mapped to some element in the codomain 
+
+---
+
+## Determinism
+
+Calling a function with the same value (in domain) results in same value (in codomain).
+
+***
+
+	let double x = x * 2
 	
-	let addFive = add 5
-	addFive 2
-	// 7
+---
+
+	[lang=js]
+	function greet(who) {
+		console.log("hello " + who)
+	}
+
+---
+
+	let formatDate format =
+		DateTime.Now.ToString(format)
+
+---
+
+	[lang=cs]
+	public string FormatDate(DateTime date, string format)
+	{
+		return date.ToString(format);
+	}
+
+---
+
+	let divide x y = x / y
 	
-' passing one arg to a function that takes 2 args 
-' returns a new function that takes 1 arg
+---
+
+	let divide x y =
+		if y = 0
+		then None
+		else Some (x / y)
 
 ***
 
 <section data-background="#5bc0de">
 
-In functional languages, all functions are interfaces
+Every function can be replaced with any other function that has the same signature
 
 ' any other function with the same signature can be substituted
 </section>
@@ -531,11 +512,7 @@ In functional languages, all functions are interfaces
 	[lang=cs]
 	interface ICalculator { int Calculate(int input); }
 
-	class AddingCalculator: ICalculator
-	{
-	   public int Calculate(int input) { return input + 1; }
-	}
-
+	//Decorator Pattern
 	class LoggingCalculator: ICalculator
 	{
 	   ICalculator _innerCalculator;
@@ -555,13 +532,11 @@ In functional languages, all functions are interfaces
 
 ' Calculator with a strategy pattern and a decorator
 
-*** 
+---
 
 Equivalent* JavaScript
 
 	[lang=js]
-	var addingCalculator = function(input) { return input + 1 }
-	
 	var log = function(func, input) {
 		console.log(input);
 		var result = func(input);
@@ -574,7 +549,7 @@ Equivalent* JavaScript
 ' passing functions rather than objects
 ' * => the log function works for any function
 	
-***
+---
 
 Statically checked types in C#
 
@@ -600,63 +575,6 @@ The same code in F#
 ' now statically checked
 
 ***
-<section data-background="#5bc0de">
-Statically type check your data access
-</section>
-
-***
-	type LocationInsert = 
-		SqlCommandProvider<
-			"INSERT INTO Locations(State, City, [Date])
-			VALUES (@State, @City, @Date)", "connectionString">
-	
-	let insertLocation city state date =
-		use command = new LocationInsert()
-		command.Execute(state, city, date)
-		
-' sql is checked at design time against actual db
-' Execute forces correct arguments
-
-***
-
-No more nulls
-
-***
-
-What is the result type of this function?
-
-	[lang=js]
-	function divide(a, b) {
-		return a / b;
-	}
-	
-' numeric for most cases,  except 0.  
-' throw an exception?
-' return null?
-
-***
-
-	type Option<'T> =
-		| Some of 'T
-		| None
-
-	let divideBy bottom top =
-		if bottom = 0
-		then None
-		else Some(top/bottom)
-		
-	8 |> divideBy 4;;
-	//int option = Some 2
-	
-	8 |> divideBy 0;;
-	//int option = None
-	
-' typical functional approach
-' treating nullable explicitly and as the exception
-		
-*** 
-
-
 
 <section data-background="#5bc0de">
 Staying focused on the happy path
@@ -667,12 +585,11 @@ Staying focused on the happy path
 Happy Path in C#
 
 	[lang=cs]
-	public string InsertLocation(Location location)
+	public void InsertLocation(Location location)
 	{
 		validateRequest(location);
 		db.updateDbFromRequest(location);
 		email.EmailNearbyCustomers(location);
-		return "Success";
 	}
 	
 ' what if the request isn't valid?
@@ -680,13 +597,12 @@ Happy Path in C#
 ---
 
 	[lang=cs]
-	public string InsertLocation(Location location)
+	public void InsertLocation(Location location)
 	{
 		if (!validateRequest(location))
 			throw new ArgumentException("Location not valid");
 		db.updateDbFromRequest(location);
 		email.EmailNearbyCustomers(location);
-		return "Success";
 	}
 
 ' what if the db throws an error?
@@ -696,10 +612,10 @@ Happy Path in C#
 Unhappy Path in C#
 
 	[lang=cs]
-	public string InsertLocation(Location location)
+	public void InsertLocation(Location location)
 	{
 		if (!validateRequest(location))
-			return "Failure";
+			throw new ArgumentException("Location not valid");
 		try
 		{
 			db.updateDbFromRequest(location);
@@ -707,10 +623,9 @@ Unhappy Path in C#
 		catch (Exception e)
 		{
 			Logger.Log(e);
-			return "Failure";
+			throw;
 		}	
 		email.EmailNearbyCustomers(location);
-		return "Success";
 	}
 	
 ' multiple returns
@@ -733,34 +648,19 @@ Unhappy Path in F#
 		>>= updateDbFromRequest
 		>>= emailNearbyCustomers
 
-***
-
-<section data-background="#F0AD4E">
-How is that possible?
-</section>	
-	
-***
-
-	[lang=js]
-	$.when([1,2,3])
-	.then(function (data) {
-		console.log(data)
-	});
-	// [1,2,3]
-	
-' can replace when with ajax
-
 ---
 
-	function log (x) { console.log(x) }
-	function addOne (x) { return x + 1 }
+![Liar](images/liar.gif)
+	
+***
 
 	[lang=js]
-	$.when([1,2,3])
-	.then(function (data) {
-		return data.map(addOne)
-	}).then(log);	
-	// [2,3,4]
+	var addOne = x => x + 1
+
+	$.when(1)
+	.then(addOne)
+	.then(console.log);	
+	// 2
 	
 ' our functions aren't written to know about promises
 ' the then function does magic to allow us to work with the underlying structure
@@ -772,8 +672,8 @@ C# .NET 4.5
 	[lang=cs]
 	async Task<int> AddSomeNumbers()
 	{
-		var one = await Task.FromResult(1);
-		var two = await Task.FromResult(2);
+		int one = await Task.FromResult(1);
+		int two = await Task.FromResult(2);
 		return one + two;
 	}
 	
@@ -785,11 +685,45 @@ Javascript ES7
 		return tweet.Content;
 	}
 
+---
+
+	[lang=js]
+	_.map([1,2,3], x => x + 2)
+	// [3,4,5]
+
+---
+
+	[lang=js]
+	_.map(['Hello', 'Codestock'], x => x.split())
+	// [ ['H','e','l','l','o'], ['C','o','d','e','s','t','o','c','k'] ]
+	
+---
+
+	[lang=js]
+	_.flatMap(['Hello', 'Codestock'], x => x.split())
+	// ['H','e','l','l','o','C','o','d','e','s','t','o','c','k']
+
 ***
 
 <section data-background="#5bc0de">
-These are all examples of Monads
+Arrays, Promises, Options, etc are all just contexts for data.
 </section>
+
+***
+
+Unhappy Path in F#
+
+	let insertLocation = 
+		validateRequest
+		>>= updateDbFromRequest
+		>>= emailNearbyCustomers
+		
+---
+
+	let insertLocation = 
+		validateRequest
+		>> flatMap updateDbFromRequest
+		>> flatMap emailNearbyCustomers
 
 ***
 
@@ -797,107 +731,38 @@ These are all examples of Monads
 		| Some of 'T
 		| None
 
-	let divideBy bottom top =
+	let divide bottom top =
 		if bottom = 0
 		then None
 		else Some(top/bottom)
 		
-	8 |> divideBy 4
+	divide 4 8
 	//int option = Some 2
 	
-	8 |> divideBy 0
+	divide 0 8
 	//int option = None
 	
 ' How do we chain them?
 ' divideBy takes ints and returns an int option
 
-***
+---
 
-Chaining Option<'T>
-
-	let divideByWorkflow init x y = maybe {
-		let! a = init |> divideBy x
-		let! b = a |> divideBy y
-		return b
-		}
-			
-	divideByWorkflow 12 3 2
-	//int option = Some 2
-
-	divideByWorkflow 12 0 1
-	//int option = None
-
-' a and b are now ints.  
-' if either return none the whole function returns none
-
-***
-
-Defining Maybe
-
-	type MaybeBuilder() =
-		member this.Return(x) = Some x
-		member this.Bind(x, f) = 
-			match x with
-			| None -> None
-			| Some a -> f a
+	divide 4 8
+	|> Option.bind (divide 2)
+	// int option = Some 1
 	
-	let maybe = new MaybeBuilder()
-
-' Return "wraps" a value in the monad
-' Bind takes a non wrapped value 'a and function from 'a to M<'b> and returns M<'b>
-			
-***
-
-	let divideByWorkflow init x y = maybe {
-		let! a = init |> divideBy x
-		let! b = a |> divideBy y
-		return b
-		}
-			
-	divideByWorkflow 12 3 2
-	//int option = Some 2
-
-	divideByWorkflow 12 0 1
-	//int option = None
-
-***
-
-<section data-background="#F0AD4E">
-Aren't Monads a Haskell thing?
-</section>
-
-***
-
-Monad in F#
+	divide 0 8
+	|> Option.bind (divide 2)
+	// int option = None
 	
-	type MaybeBuilder() =
-		member this.Return(x) = Some x
-		member this.Bind(x, f) = 
-			match x with
-			| None -> None
-			| Some a -> f a
-	
-Monad in Haskell
-	
-	[lang=haskell]
-	class Monad m where {
-	  (>>=)  :: m a -> (a -> m b) -> m b
-	  return :: a  -> m a
-	} 	
-	
-' the Fsharp example is for a specific monad
-' the Haskell version is generic and accepts any monad
-' not generic type classes like Haskell
+---
 
-***
+	let square x = x * x
 
-Equivalent Haskell Monad in F#
-
-	type Monad<'M> =
-		abstract member bind : 'M<'a> -> ('a -> 'M<'b>) -> 'M<'b>
-		abstract member ``return`` : 'a -> 'M<'a>
-
-	//error FS0712: Type parameter cannot be used as type constructor
+	divide 4 8
+	|> Option.map square
+	|> Option.bind (divide 2)
+	// int option = Some 2
 
 ***
 
@@ -907,20 +772,15 @@ How do I choose a functional language?
 
 ***
 
-* **Haskell** - Pure language
-* **Clojure** - A Lisp on JVM
-* **F#** - Functional first on CLR / .NET
+* **Clojure** - A Lisp on the JVM
+* **Elm** - Pure language for the browser
 * **Erlang / Elixir** - Massive scalability
-
-
-' all languages have pros and cons
-' need 'web scale'? look at Erlang and Elixir
-' already on .Net? look at F# though Clojure can target clr
-' already on Java? Clojure and Scala
-' want a pure language? try Haskell
+* **F#** - Functional first on CLR / .NET
+* **Haskell** - Pure functional language 
+* **Scala** - Functional first on the JVM
+* **Your Current Language**
 
 ***
-
 
 
 ## Anecdotal Results of switching to FP
@@ -975,16 +835,5 @@ The model you use to view the world shapes the thoughts you are able to think.
 
 ###[@ReidNEvans](http://twitter.com/reidnevans)
 
-http://reidevans.tech
-
-Links
-
-http://fsharpforfunandprofit.com
-
-Monads in pictures
-http://tinyurl.com/MonadsInPictures
-
-Look, No Mocks! Functional TDD with F#
-http://www.infoq.com/presentations/mock-fsharp-tdd
-
-http://theburningmonk.com/2015/04/dont-learn-a-syntax-learn-to-change-the-way-you-think/
+####http://reidevans.tech
+####[@FunctionalKnox](http://twitter.com/functionalknox)
