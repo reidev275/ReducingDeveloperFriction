@@ -694,14 +694,14 @@ Javascript ES7
 ---
 
 	[lang=js]
-	_.map(['Hello', 'Codestock'], x => x.split())
-	// [ ['H','e','l','l','o'], ['C','o','d','e','s','t','o','c','k'] ]
+	_.map(['Hello', 'Nashville'], x => x.split())
+	// [ ['H','e','l','l','o'], ['N','a','s','h','v','i','l','l','e'] ]
 	
 ---
 
 	[lang=js]
-	_.flatMap(['Hello', 'Codestock'], x => x.split())
-	// ['H','e','l','l','o','C','o','d','e','s','t','o','c','k']
+	_.flatMap(['Hello', 'Nashville'], x => x.split())
+	// ['H','e','l','l','o','N','a','s','h','v','i','l','l','e']
 
 ***
 
